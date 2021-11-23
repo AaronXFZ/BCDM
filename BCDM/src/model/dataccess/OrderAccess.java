@@ -39,7 +39,7 @@ public class OrderAccess {
 
 		
 		//Create an instance of the ConnectionFactory class to obtain the non-defaulted server
-		ConnectionFactory connection_factory_custom_database_obj = new ConnectionFactory(user, non_default_URL, non_default_USER, non_default_PWD);
+		ConnectionFactory connection_factory_custom_database_obj = new ConnectionFactory(non_default_URL, non_default_USER, non_default_PWD);
 
 		System.out.println("HELLOOO");
 		Date date = new Date(); // This object contains the current date value
@@ -63,16 +63,13 @@ public class OrderAccess {
 		
 		if(rs_status == 1)
 		{
-			//final String SQL_cmd_insert_items = "INSERT INTO order_mgmt (Order_ID, Item_ID) VALUES (?,?,?)";
+			final String SQL_cmd_insert_items = "INSERT INTO order_mgmt (Order_ID, Item_ID) VALUES (?,?,?)";
 		}
 
 		return rs_status;
 		
 	}
 	
-	public Integer get_item_by_ID(Integer Item_ID)
-	{
-		
-	}
+
 	
 }

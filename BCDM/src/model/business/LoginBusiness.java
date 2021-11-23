@@ -31,9 +31,11 @@ import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
 import view.LoginSuccessView;
+import model.dataccess.MenuAccess;
 
 import view.ReceiptView;
 import model.dataccess.OrderAccess;
+import model.entities.OrderOperations;
 
 public class LoginBusiness extends JFrame implements ActionListener {
 	private String address = "";
@@ -175,6 +177,8 @@ public class LoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
+					OrderOperations order_obj = new OrderOperations();
+					MenuAccess menu_obj = new MenuAccess();
 					OrderAccess orderAccess_obj = new OrderAccess(userName);
 					System.out.println(orderAccess_obj.submitOrder(user));
 					new LoginSuccessView(userName);

@@ -24,7 +24,7 @@ public class ConnectionFactory {
 	
 	
 	//Default constructor for connecting to the default database
-	public ConnectionFactory(User user) throws ClassNotFoundException, SQLException {
+	public ConnectionFactory() throws ClassNotFoundException, SQLException {
 
 		final String URL = "jdbc:postgresql://localhost:5432/BCDM_DB";
 
@@ -32,15 +32,15 @@ public class ConnectionFactory {
 
 		final String PWD = "123";
 
-		initiateDatabaseConnection(user, URL, USER, PWD);
+		initiateDatabaseConnection(URL, USER, PWD);
 
 		
 	}
 	
 	//Constructor for when user wishes to connect to other databases
-	public ConnectionFactory(User user, String URL, String USER, String PWD) throws ClassNotFoundException, SQLException {
+	public ConnectionFactory(String URL, String USER, String PWD) throws ClassNotFoundException, SQLException {
 		System.out.println("from ConnectonFactory " + URL);
-		initiateDatabaseConnection(user, URL, USER, PWD);
+		initiateDatabaseConnection(URL, USER, PWD);
 		
 	}
 	
@@ -49,7 +49,7 @@ public class ConnectionFactory {
 	// String URL -> URL of database
 	// String USER -> user for accessing database
 	// String PWD -> password for accessing database
-	private void initiateDatabaseConnection(User user, String URL, String USER, String PWD)
+	private void initiateDatabaseConnection(String URL, String USER, String PWD)
 			 throws ClassNotFoundException, SQLException {
 		
 		Class.forName("org.postgresql.Driver");

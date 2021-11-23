@@ -32,7 +32,7 @@ public class LoginDataAccess {
 		final String non_default_PWD = "123";
 		
 		//Create an instance of the ConnectionFactory class to obtain the non-defaulted server
-		ConnectionFactory connection_factory_custom_database_obj = new ConnectionFactory(user, non_default_URL, non_default_USER, non_default_PWD);
+		ConnectionFactory connection_factory_custom_database_obj = new ConnectionFactory(non_default_URL, non_default_USER, non_default_PWD);
 
 		
 		final PreparedStatement stmt = connection_factory_custom_database_obj.getConnection().prepareStatement("SELECT * FROM users WHERE username=? and password=?");
