@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import model.entities.User;
 import model.dataccess.ConnectionFactory;
 
-import model.entities.Offline_Item;
+import model.entities.OfflineItem;
 
 //This class will be use to obtain a list of items from the backend
 public class MenuAccess {

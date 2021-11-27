@@ -9,7 +9,7 @@ import org.hibernate.cfg.Configuration;
 import model.entities.Customer;
 import model.entities.Professor;
 import model.entities.Student;
-import model.entities.Offline_Item;
+import model.entities.OfflineItem;
 import model.entities.OnlineItem;
 import model.entities.PriceHistory;
 

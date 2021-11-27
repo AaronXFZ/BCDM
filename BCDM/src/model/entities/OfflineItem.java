@@ -1,7 +1,7 @@
 package model.entities;
 
 //This class is used in case obtaining the Items fail (secondary items list)
-public class Offline_Item {
+public class OfflineItem {
 	
 	final private Integer max_num_items = 11;
 	private String name[];
@@ -15,9 +15,9 @@ public class Offline_Item {
 	
 	final private String stackoverflow_err_msg = "\nError: Inserted ID must be [0,"+(max_num_items-1)+"] within the Item class.\n";
 	
-	private static Offline_Item singleton_obj = new Offline_Item();
+	private static OfflineItem singleton_obj = new OfflineItem();
 	
-	public Offline_Item() {
+	public OfflineItem() {
 		name = new String[max_num_items];
 		isBeverage = new Boolean[max_num_items];
 		price = new Double[max_num_items];
@@ -43,7 +43,7 @@ public class Offline_Item {
 		this.price[ID_num] = price;
 	}
 	
-	public static Offline_Item get_singleton()
+	public static OfflineItem get_singleton()
 	{
 		return singleton_obj;
 	}

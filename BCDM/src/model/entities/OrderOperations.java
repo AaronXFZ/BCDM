@@ -2,7 +2,7 @@ package model.entities;
 
 import java.util.HashMap; //For storing order
 
-import model.entities.Offline_Item;
+import model.entities.OfflineItem;
 
 
 // NOTE: Make GUI in this for tomorrow.
@@ -12,7 +12,7 @@ public class OrderOperations {
 
 	private HashMap<String, Integer> carted_items = new HashMap<String, Integer>();
 	
-	private Offline_Item items_obj = Offline_Item.get_singleton();
+	private OfflineItem items_obj = OfflineItem.get_singleton();
 	
 	private double subtotal;
 	
