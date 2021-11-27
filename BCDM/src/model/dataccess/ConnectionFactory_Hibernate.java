@@ -24,10 +24,22 @@ public class ConnectionFactory_Hibernate {
             .addAnnotatedClass(PriceHistory.class)
             .buildSessionFactory();
 	
-	private ConnectionFactory_Hibernate() {}
+	public ConnectionFactory_Hibernate() {}
 	
 	public Session getSession() throws ClassNotFoundException, SQLException
 	{
 		return factory.getCurrentSession();
+	}
+	
+	public void restart_session()
+	{
+		factory = new Configuration().
+	            configure("hibernate.cfg.xml")
+	            .addAnnotatedClass(Customer.class)
+	            .addAnnotatedClass(Student.class)
+	            .addAnnotatedClass(Professor.class)
+	            .addAnnotatedClass(OnlineItem.class)
+	            .addAnnotatedClass(PriceHistory.class)
+	            .buildSessionFactory();
 	}
 }

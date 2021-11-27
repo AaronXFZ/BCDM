@@ -36,6 +36,7 @@ import model.dataccess.MenuAccess;
 import view.ReceiptView;
 import model.dataccess.OrderAccess;
 import model.entities.OrderOperations;
+import model.dataccess.ItemsAccess;
 
 public class LoginBusiness extends JFrame implements ActionListener {
 	private String address = "";
@@ -177,10 +178,15 @@ public class LoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
+					ItemsAccess item_access_obj = new ItemsAccess();
+					item_access_obj.add_new_item_to_db("Cheeseburger", 3.99, false);
+					
+		
 					OrderOperations order_obj = new OrderOperations();
 					MenuAccess menu_obj = new MenuAccess();
 					OrderAccess orderAccess_obj = new OrderAccess(userName);
 					System.out.println(orderAccess_obj.submitOrder(user));
+					
 					new LoginSuccessView(userName);
 					dispose();
 				}
