@@ -13,6 +13,8 @@ public class Student
 	@Column(name = "id")
 	private int id;
 	
+	final double discount_percentage = 0.12;
+	
 	public Student() {}
 	
 	public Student(int id)
@@ -29,6 +31,14 @@ public class Student
 	public int getID()
 	{
 		return id;
+	}
+	
+	public double get_discounted_price(double full_price)
+	{
+		
+		final double discounted_price = full_price - (full_price*discount_percentage);
+		
+		return discounted_price;
 	}
 
 }
