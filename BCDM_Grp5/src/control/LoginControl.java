@@ -44,12 +44,8 @@ public class LoginControl extends HttpServlet {
 		
 		Boolean isWebClient = true;
 		
-		
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
-		
-		System.out.println("UUUUSSER = " + userName);
-		System.out.println("password = " + password);
 		
 		LoginBusiness login_business_obj = LoginBusiness.getSingletonObject();
 		

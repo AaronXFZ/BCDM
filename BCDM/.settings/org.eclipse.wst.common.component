@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
         
-    <wb-module deploy-name="Authentication">
+    <wb-module deploy-name="BCDM">
                 
         <wb-resource deploy-path="/" source-path="/WebContent"/>
                 
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
                 
-        <property name="java-output-path" value="/Authentication/build/classes"/>
+        <property name="java-output-path" value="/BCDM/build/classes"/>
                 
-        <property name="context-root" value="Authentication"/>
+        <property name="context-root" value="BCDM"/>
             
     </wb-module>
     
