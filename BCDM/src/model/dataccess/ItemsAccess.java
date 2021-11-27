@@ -1,12 +1,12 @@
 package model.dataccess;
 
-import java.util.List;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import java.util.List;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.dataccess.ConnectionFactory_Hibernate;
 
@@ -36,7 +36,8 @@ public class ItemsAccess {
 	{
 		for(int i = 0; i < online_items.size(); i++)
 		{
-			if(online_items.get(i).get_name() == name)
+			System.out.println("Each Item = " + online_items.get(i).get_name());
+			if(online_items.get(i).get_name().equals(name))
 			{
 				return online_items.get(i);
 			}
@@ -44,6 +45,11 @@ public class ItemsAccess {
 		
 		System.out.print("\nError: Item not found on database.\n");
 		return null;
+	}
+	
+	public List<OnlineItem> get_all_online_items()
+	{
+		return online_items;
 	}
 
 	public void add_new_item_to_db(String item_name, double price, boolean isBeverage) throws ClassNotFoundException, SQLException

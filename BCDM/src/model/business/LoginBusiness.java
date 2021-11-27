@@ -1,6 +1,6 @@
 /* Name: Kevin T. Vo
  * Course: CS 5800
- * Assignment: Assignment 4 - Problem 6
+ * Assignment: BCDM Project
  * Filename: LoginBusiness.java
  * 
  * Description: 1. This is an intermediate business layer class that will conduct all business rules including field validation and user authentication.
@@ -35,7 +35,8 @@ import model.dataccess.MenuAccess;
 
 import view.ReceiptView;
 import model.dataccess.OrderAccess;
-import model.entities.OrderOperations;
+import model.entities.Cart;
+import model.dataccess.AccountAccess;
 import model.dataccess.ItemsAccess;
 
 public class LoginBusiness extends JFrame implements ActionListener {
@@ -43,6 +44,9 @@ public class LoginBusiness extends JFrame implements ActionListener {
 	private Boolean isWebClient = false;
 	private String userName;
 	private String password;
+	private String first_name;
+	private String last_name;
+	private boolean is_professor;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
@@ -66,10 +70,28 @@ public class LoginBusiness extends JFrame implements ActionListener {
 		return singleton_instance;
 	}
 	
-	public void setAttributes(String in_userName, String in_password, Boolean in_isWebClient, HttpServletRequest in_request, HttpServletResponse in_response)
+	//setAttributes for Registration
+	public void setAttributes(String in_userName, String in_password, String in_first_name, String in_last_name, boolean in_is_professor,
+			boolean in_isWebClient, HttpServletRequest in_request, HttpServletResponse in_response)
 	{
 		userName = in_userName;
 		password = in_password;
+		first_name = in_first_name;
+		last_name = in_last_name;
+		is_professor = in_is_professor;
+		
+		isWebClient = in_isWebClient;
+		request = in_request;
+		response = in_response;
+	}
+	
+	//Overload: setAttribute for Log In
+	public void setAttributes(String in_userName, String in_password,
+			boolean in_isWebClient, HttpServletRequest in_request, HttpServletResponse in_response)
+	{
+		userName = in_userName;
+		password = in_password;
+		
 		isWebClient = in_isWebClient;
 		request = in_request;
 		response = in_response;
@@ -158,7 +180,7 @@ public class LoginBusiness extends JFrame implements ActionListener {
 			//User user = new User(userName, password);
 			
 			User user = User.getSingletonObject();
-			
+
 			user.setAttributes(userName, password);
 			
 			
@@ -178,14 +200,23 @@ public class LoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
-					ItemsAccess item_access_obj = new ItemsAccess();
-					item_access_obj.add_new_item_to_db("Cheeseburger", 3.99, false);
+					AccountAccess account_access_obj = new AccountAccess("eric", "professor");
 					
-		
-					OrderOperations order_obj = new OrderOperations();
+					ItemsAccess item_access_obj = new ItemsAccess();
+					//item_access_obj.add_new_item_to_db("Sprite", 2.99, true);
+					
+					System.out.println("\nAll items = " + item_access_obj.get_all_online_items().get(0).get_isBeverage());
+					
+					System.out.println("\nONE items = " + item_access_obj.get_online_item("Chicken Taco").get_price());
+					
+					Cart cart_obj = new Cart();
+					
+					cart_obj.add_item("Cheeseburger");
+					cart_obj.add_item("Beef Taco");
+					
 					MenuAccess menu_obj = new MenuAccess();
 					OrderAccess orderAccess_obj = new OrderAccess(userName);
-					System.out.println(orderAccess_obj.submitOrder(user));
+					orderAccess_obj.submit_order(cart_obj);
 					
 					new LoginSuccessView(userName);
 					dispose();

@@ -5,12 +5,12 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name ="historicalprice")
+@Table(name ="historical_price")
 public class PriceHistory
 {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "price_id")
+	@Column(name = "id")
 	private int price_id;
 	
 	@Column(name = "item_id")
@@ -19,7 +19,7 @@ public class PriceHistory
 	@Column(name = "price")
 	private float price;
 	
-	@Column(name = "start")
+	@Column(name = "price_date")
 	private Date price_date;
 	
 	public PriceHistory() {}

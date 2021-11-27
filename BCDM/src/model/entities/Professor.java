@@ -11,7 +11,7 @@ public class Professor
 	@Column(name="id")
 	private int id;
 	
-	final double discount_percentage = 0.45;
+	double discount_percentage;
 	
 	public Professor() {}
 	
@@ -30,10 +30,15 @@ public class Professor
 		return id;
 	}
 	
+//	public int membership_duration()
+//	{
+//		
+//	}
+	
 	public double get_discounted_price(double full_price)
 	{
 		
-		final double discounted_price = full_price - (full_price*discount_percentage);
+		double discounted_price = full_price - (full_price*discount_percentage);
 		
 		return discounted_price;
 	}

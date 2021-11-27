@@ -8,7 +8,7 @@ import model.entities.OfflineItem;
 // NOTE: Make GUI in this for tomorrow.
 
 //This Class makes an order then submits it
-public class OrderOperations {
+public class Old_OrderOperations {
 
 	private HashMap<String, Integer> carted_items = new HashMap<String, Integer>();
 	
@@ -16,7 +16,7 @@ public class OrderOperations {
 	
 	private double subtotal;
 	
-	public OrderOperations()
+	public Old_OrderOperations()
 	{
 		subtotal = 0.00;
 
@@ -100,7 +100,9 @@ public class OrderOperations {
 		
 			Double item_price = items_obj.get_price(item_ID);
 			
-			subtotal = item_price * carted_items.get(str_key);
+			subtotal += item_price;
+			
+			//subtotal += item_price * carted_items.get(str_key);
 		}
 	}
 	
@@ -109,6 +111,11 @@ public class OrderOperations {
 		update_subtotal();
 		
 		return subtotal;
+	}
+	
+	public HashMap<String, Integer> get_order()
+	{
+		return carted_items;
 	}
 	
 	
