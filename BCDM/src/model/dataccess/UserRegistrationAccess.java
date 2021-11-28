@@ -26,7 +26,7 @@ public class UserRegistrationAccess {
 		return reg_access_singleton;
 	}
 	
-	public void registration_user(String userName, String password, String first_name, String last_name, boolean is_professor) throws ClassNotFoundException, SQLException
+	public boolean registration_user(String userName, String password, String first_name, String last_name, boolean is_professor) throws ClassNotFoundException, SQLException
 	{
 		User temp_user = User.getSingletonObject();
 				
@@ -39,6 +39,18 @@ public class UserRegistrationAccess {
 		session.save(temp_user);
 		
 		session.getTransaction().commit();
+		
+		
+		Session confirm_reg_session = conn_factory_hib.getSession();
+		
+		confirm_reg_session.beginTransaction();
+		
+		User newly_registered_user = confirm_reg_session.get(User.class, userName);
+	
+		if(newly_registered_user.getUserName() == userName)
+			return true;
+		
+		return false;
 	
 	}
 //	

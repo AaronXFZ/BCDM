@@ -7,6 +7,7 @@ import org.hibernate.cfg.Configuration;
 import java.util.List;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.dataccess.ConnectionFactory_Hibernate;
 
@@ -17,6 +18,8 @@ public class ItemsAccess {
 	private ConnectionFactory_Hibernate conn_factory_hiber = new ConnectionFactory_Hibernate();
 	
 	private List<OnlineItem> online_items;
+	
+	private HashMap<String, Double> item_price_map = new HashMap<String, Double>();
 
 	
 	public ItemsAccess() throws ClassNotFoundException, SQLException
@@ -27,7 +30,20 @@ public class ItemsAccess {
 		session.beginTransaction();
 
 		online_items = session.createQuery("from OnlineItem").getResultList();
+		
+		for(int i = 0; i < online_items.size(); i++)
+		{
+			String item_name = online_items.get(i).get_name();
+			Double item_price = online_items.get(i).get_price();
+			
+			item_price_map.put(item_name, item_price);
+		}
 				
+	}
+	
+	public HashMap<String, Double> get_online_item_hash_map()
+	{
+		return item_price_map;
 	}
 
 	public OnlineItem get_online_item_by_id(int item_id) throws ClassNotFoundException, SQLException

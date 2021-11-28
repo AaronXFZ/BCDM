@@ -24,7 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.business.LoginBusiness;
+import model.business.RegisterLoginBusiness;
 import model.dataccess.LoginDataAccess;
 
 
@@ -32,14 +32,20 @@ import model.entities.MessageException;
 import model.entities.User;
 import view.LoginSuccessView;
 
+import view.RegisterSucessView;
 
 import view.ReceiptView;
 import model.dataccess.OrderAccess;
+import model.dataccess.UserRegistrationAccess;
 import model.entities.Cart;
 import model.dataccess.AccountAccess;
 import model.dataccess.ItemsAccess;
 
-public class LoginBusiness extends JFrame implements ActionListener {
+
+
+import view.OrderView;
+
+public class RegisterLoginBusiness extends JFrame implements ActionListener {
 	private String address = "";
 	private Boolean isWebClient = false;
 	private String userName;
@@ -59,12 +65,12 @@ public class LoginBusiness extends JFrame implements ActionListener {
 	private final String failed_connection_DB_status = "Database connection failed.";
 	
 	
-	private static LoginBusiness singleton_instance = new LoginBusiness();
+	private static RegisterLoginBusiness singleton_instance = new RegisterLoginBusiness();
 	
-	private LoginBusiness()
+	private RegisterLoginBusiness()
 	{ }
 	
-	public static LoginBusiness getSingletonObject()
+	public static RegisterLoginBusiness getSingletonObject()
 	{
 		
 		return singleton_instance;
@@ -159,6 +165,19 @@ public class LoginBusiness extends JFrame implements ActionListener {
 		
 	}
 	
+	public void validate_registration() throws ClassNotFoundException, SQLException
+	{
+		UserRegistrationAccess registration = UserRegistrationAccess.get_singleton();
+		
+		boolean is_registered = registration.registration_user(userName, password, first_name, last_name, is_professor);
+		
+		if(is_registered)
+		{
+			new RegisterSucessView(userName);
+		}
+		
+	}
+	
 	public void validate() {
 			
 		
@@ -200,6 +219,9 @@ public class LoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
+					OrderView order_view_obj = new OrderView();
+
+					
 					AccountAccess account_access_obj = new AccountAccess("eric", "professor");
 					
 					ItemsAccess item_access_obj = new ItemsAccess();
@@ -219,7 +241,7 @@ public class LoginBusiness extends JFrame implements ActionListener {
 					OrderAccess orderAccess_obj = new OrderAccess(userName);
 					orderAccess_obj.submit_order(cart_obj);
 					
-					new LoginSuccessView(userName);
+					//new LoginSuccessView(userName);
 					dispose();
 				}
 			}

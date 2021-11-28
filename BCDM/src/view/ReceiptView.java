@@ -51,7 +51,7 @@ public class ReceiptView {
 		
 		frame.getContentPane().add(panel1, BorderLayout.CENTER);
 		frame.setBounds(280,120,500,500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setVisible(true);
 	}	
 

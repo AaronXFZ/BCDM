@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.business.LoginBusiness;
+import model.business.RegisterLoginBusiness;
 import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
@@ -51,7 +51,7 @@ public class LoginControl extends HttpServlet {
 		System.out.println("UUUUSSER = " + userName);
 		System.out.println("password = " + password);
 		
-		LoginBusiness login_business_obj = LoginBusiness.getSingletonObject();
+		RegisterLoginBusiness login_business_obj = RegisterLoginBusiness.getSingletonObject();
 		
 		login_business_obj.setAttributes(userName, password, isWebClient, request, response);
 		
