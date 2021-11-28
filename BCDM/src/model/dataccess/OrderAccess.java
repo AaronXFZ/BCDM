@@ -2,6 +2,7 @@ package model.dataccess;
 
 import model.dataccess.ConnectionFactory_Hibernate;
 
+
 import org.hibernate.Session;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,9 @@ import model.entities.User;
 import model.dataccess.ConnectionFactory;
 
 import model.entities.ItemOrder;
+
+import model.entities.Receipt;
+
 /*
 Have an class for Orders
 Parameter for Class Order:
@@ -30,6 +34,8 @@ public class OrderAccess {
 	private ConnectionFactory_Hibernate conn_factory = new ConnectionFactory_Hibernate();
 	
 	private String username;
+	
+	private List<ItemOrder> ordered_items = new ArrayList();
 	
 	public OrderAccess(String username)
 	{
@@ -51,6 +57,7 @@ public class OrderAccess {
 		List<String> list_of_items = cart.get_items();
 		
 		Session session = conn_factory.getSession();
+		
 		session.beginTransaction();
 		
         String order_id_hashvalue = username+current_date+current_time;
@@ -60,14 +67,60 @@ public class OrderAccess {
 		for(int i = 0; i < cart.get_items().size(); i++)
 		{
 			ItemOrder item_order_obj = new ItemOrder(username, current_date, current_time, cart.get_items().get(i), order_id) ;
+			
+			ordered_items.add(item_order_obj);
+			
 			session.save(item_order_obj);
 		}
 		
 		session.getTransaction().commit();
-	
+		
+		
+		Receipt receipt_obj = new Receipt(ordered_items);
+		
+		//open Receipt Screen to point receipt info with receipt_obj here
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//Clears the cart once order is submitted
+		cart.clear_cart();
 		
 	}
 	
+	
+	
+	//To use this function, it has to call the get all orders from the table which is the get all orders function within this class
+	public void delete_item_from_order_by_item_id(int order_id) throws ClassNotFoundException, SQLException 
+	{
+		Session session = conn_factory.getSession();
+		
+		session.beginTransaction();
+		
+		session.createQuery("delete from ItemOrder where order_id='" + order_id + "'")
+		       .executeUpdate();
+		
+	}
+	
+	//To use this function, it has to call the get all orders from the table which is the get all orders function within this class
+	public void delete_entire_order_by_id(int id) throws ClassNotFoundException, SQLException 
+	{
+		Session session = conn_factory.getSession();
+		
+		session.beginTransaction();
+		
+		session.createQuery("delete from ItemOrder where id='" + id + "'")
+		       .executeUpdate();
+		
+	}
 
 	
 //	

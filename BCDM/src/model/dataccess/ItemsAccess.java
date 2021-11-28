@@ -30,7 +30,14 @@ public class ItemsAccess {
 				
 	}
 
+	public OnlineItem get_online_item_by_id(int item_id) throws ClassNotFoundException, SQLException
+	{
+		Session session = conn_factory_hiber.getSession();
+		
+		session.beginTransaction();
 
+		return session.get(OnlineItem.class, item_id);
+	}
 	
 	public OnlineItem get_online_item(String name)
 	{

@@ -78,9 +78,18 @@ public class User {
         this.is_professor = is_professor;
         
         set_start_member_date();
-        set_discount();
     }
 
+    public String get_first_name()
+    {
+    	return first_name;
+    }
+    
+    public String get_last_name()
+    {
+    	return last_name;
+    }
+    
     public String getUserName() {
         return userName;
     }

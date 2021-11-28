@@ -31,7 +31,7 @@ import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
 import view.LoginSuccessView;
-import model.dataccess.MenuAccess;
+
 
 import view.ReceiptView;
 import model.dataccess.OrderAccess;
@@ -209,12 +209,13 @@ public class LoginBusiness extends JFrame implements ActionListener {
 					
 					System.out.println("\nONE items = " + item_access_obj.get_online_item("Chicken Taco").get_price());
 					
-					Cart cart_obj = new Cart();
+					Cart cart_obj = new Cart(user);
 					
 					cart_obj.add_item("Cheeseburger");
 					cart_obj.add_item("Beef Taco");
 					
-					MenuAccess menu_obj = new MenuAccess();
+					System.out.println(cart_obj.get_subtotal() + " --- " + cart_obj.get_discounted_total() + " --- " + cart_obj.get_discount_rate());
+
 					OrderAccess orderAccess_obj = new OrderAccess(userName);
 					orderAccess_obj.submit_order(cart_obj);
 					

@@ -36,5 +36,30 @@ public class ItemOrder {
 
 	}
 	
+	public String get_username()
+	{
+		return username;
+	}
+	
+	public String get_date()
+	{
+		return order_date;
+	}
+	
+	public String get_time()
+	{
+		return order_time;
+	}
+	
+	public int get_order_id()
+
+	{
+		return order_id;
+	}
+	
+	public String get_item_name()
+	{	
+		return item_name;
+	}
 
 }
