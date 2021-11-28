@@ -34,6 +34,17 @@ public class ReceiptAccess {
 		receipts = session.createQuery("from Receipt").getResultList();
 	}
 	
+	public void submit_receipt(Receipt receipt) throws ClassNotFoundException, SQLException
+	{
+		Session session = conn_factory.getSession();
+		
+		session.beginTransaction();
+		
+		session.save(receipt);
+		
+		session.getTransaction().commit();
+	}
+	
 	public List<Receipt> get_receipts_by_username(String username)
 	{
 		username_receipts.clear();

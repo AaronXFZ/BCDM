@@ -14,7 +14,7 @@ public class Old_OrderOperations {
 	
 	private OfflineItem items_obj = OfflineItem.get_singleton();
 	
-	private double subtotal;
+	private double subtotal = 0.00;
 	
 	public Old_OrderOperations()
 	{
@@ -22,9 +22,10 @@ public class Old_OrderOperations {
 
 	}
 	
+
 	
 	//This function will add/edit an item onto the cart based on the parameter Integer quantity
-	public void add_edit_item(Integer item_ID, Integer quantity)
+	public void add_edit_item(int item_ID, Integer quantity)
 	{
 		if(quantity < 0)
 		{
@@ -76,7 +77,7 @@ public class Old_OrderOperations {
 		return carted_items.size();
 	}
 	
-	public Double get_price(Integer item_ID)
+	public Double get_total_price(Integer item_ID)
 	{
 		final String item_name = items_obj.get_name(item_ID);
 		
