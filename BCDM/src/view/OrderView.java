@@ -3,6 +3,7 @@ package view;
 import model.dataccess.ItemsAccess; // Obtains the menu from the DB
 import model.entities.Cart;	// Use to add carted items onto list to then be pushed to DB
 import model.entities.OnlineItem;
+import model.entities.PriceHistory;
 import model.entities.SubmitOrder;
 import model.entities.User; // Associates order with the User for the DB 
 
@@ -16,6 +17,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -288,13 +290,13 @@ public class OrderView {
 	}
 	
 	private void addSelectedMenuItemButton(String menuItemName) {
-		JLabel toAdd = new JLabel("<html><center>" + menuItemName+ "..."+menuItemNameToPrice.getOrDefault(menuItemName, 0)+ "</center></html>");
-		Dimension toAddLabelSize = new Dimension(200,40);
-		toAdd.setMaximumSize(toAddLabelSize);
-		toAdd.setMinimumSize(toAddLabelSize);
-		toAdd.setPreferredSize(toAddLabelSize);
-		selectedItemsListPanel.add(toAdd);
-		selectedMenuItemLabels.put(menuItemName, toAdd);
+		JLabel toAdd = new JLabel("<html><center>" + menuItemName+ "..."+toPriceString(menuItemNameToPrice.getOrDefault(menuItemName, 0))+ "</center></html>");
+        Dimension toAddLabelSize = new Dimension(200,40);
+        toAdd.setMaximumSize(toAddLabelSize);
+        toAdd.setMinimumSize(toAddLabelSize);
+        toAdd.setPreferredSize(toAddLabelSize);
+        selectedItemsListPanel.add(toAdd);
+        selectedMenuItemLabels.put(menuItemName, toAdd);
 		
 		//Adds item to cart container
 		cart_obj.add_item(menuItemName);
@@ -377,18 +379,19 @@ public class OrderView {
 	}
 	
 	private static String toPriceString(int priceCents) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("$ ");
-		sb.append(priceCents/100);
-		sb.append(".");
-		String cents = String.valueOf(priceCents%100);
-		if(cents.length() == 1) {
-			cents = "0" + cents;
-		}
-		sb.append(cents);
-		return sb.toString();
-		
-	}
+        StringBuilder sb = new StringBuilder();
+        priceCents = priceCents*100;
+        sb.append("$ ");
+        sb.append(priceCents/100);
+        sb.append(".");
+        String cents = String.valueOf(priceCents%100);
+        if(cents.length() == 1) {
+            cents = "0" + cents;
+        }
+        sb.append(cents);
+        return sb.toString();
+
+    }
 	
 	private String generateReceiptString() {
 		StringBuilder sb = new StringBuilder();
@@ -424,13 +427,27 @@ public class OrderView {
 		StringBuilder sb = new StringBuilder();
 		sb.append("History Information: \n\n");
 		
-		for(String selectedItem: menuItemNameToPrice.keySet()) {
-			sb.append("Date Here ");
-			sb.append(selectedItem);
-			sb.append(" - ");
-			sb.append("$ Price Here \n");
+		PriceHistory price_hist_obj = new PriceHistory();
+		
+		List<PriceHistory> all_price_hist = price_hist_obj.get_all_price_history();
+		
+		for(int i = 0; i < all_price_hist.size(); i++)
+		{
 			
+			SimpleDateFormat formatter_date = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat formatter_time = new SimpleDateFormat("HH:mm:ss");
+			
+			final String price_change_date = formatter_date.format(all_price_hist.get(i).get_price_date());
+
+			
+			sb.append(price_change_date);
+			
+			sb.append("   Item_ID: " + all_price_hist.get(i).get_item_id());
+			sb.append(" - ");
+			sb.append("$ "+ all_price_hist.get(i).get_price() + "\n");
 		}
+		
+
 		return sb.toString();
 	}
 	

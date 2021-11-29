@@ -29,7 +29,7 @@ public class PriceHistoryAccess {
 		
 		session.beginTransaction();
 		
-		List<PriceHistory> list_all_prices_history = session.createQuery("from historical_price").getResultList();
+		List<PriceHistory> list_all_prices_history = session.createQuery("from PriceHistory").getResultList();
 		
 		return list_all_prices_history;
 	}
@@ -40,7 +40,7 @@ public class PriceHistoryAccess {
 		
 		session.beginTransaction();
 		
-		List<PriceHistory> list_prices_history_by_id = session.createQuery("from historical_price h where h.item_id=:item_id")
+		List<PriceHistory> list_prices_history_by_id = session.createQuery("from PriceHistory h where h.item_id=:item_id")
 				                                                .setParameter("item_id", item_id).list();
 		
 		return list_prices_history_by_id;

@@ -127,14 +127,13 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 			}
 			else
 			{
-				System.out.println("dfdfdfsdfsfsdfsfsfAAA");
+
 				//populates hashmap with items sold (filtered by userName)
 				try {
 					Intelligent_Report intel_report_obj = new Intelligent_Report();
 					
 					intel_report_obj.record_ordered_items_onto_map_by_username(userName);
 					
-					System.out.println("KLIIIL ME = " + intel_report_obj.get_all_items_ordered_by_username().get("Cheeseburger"));
 					
 					new RevenueReportView(
 							userName,

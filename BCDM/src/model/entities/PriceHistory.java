@@ -65,6 +65,8 @@ public class PriceHistory
 		PriceHistoryAccess price_hist_access = new PriceHistoryAccess();
 		
 		price_hist_access.set_price_hist(new PriceHistory(item_id, item_name, price, price_date));
+		
+		
 	}
 	
 	public List<PriceHistory> get_all_price_history()

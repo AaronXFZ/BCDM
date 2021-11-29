@@ -4,6 +4,7 @@ import model.dataccess.ConnectionFactory_Hibernate;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Random;
 
 import org.hibernate.Session;
 
@@ -59,7 +60,9 @@ public class ProductRegistration {
 		try {
 			items_access_obj = new ItemsAccess();
 			
-			
+//			Random rand = new Random();
+//			
+//			int in_item_id = rand.nextInt(100);
 			int in_item_id = items_access_obj.get_online_item(item_name).get_id();
 			double in_price = items_access_obj.get_online_item(item_name).get_price();
 			
@@ -73,6 +76,12 @@ public class ProductRegistration {
 			PriceHistoryAccess price_hist_acess_obj = new PriceHistoryAccess(price_hist_obj);
 			
 			//Editing price of item
+			
+			Session session_add_to_price_hist = conn_factory.getSession();
+			
+			session_add_to_price_hist.beginTransaction();
+			session_add_to_price_hist.save(price_hist_obj);
+			session_add_to_price_hist.getTransaction().commit();
 			
 			Session session = conn_factory.getSession();
 			
