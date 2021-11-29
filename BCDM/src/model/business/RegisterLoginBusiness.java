@@ -41,6 +41,7 @@ import model.entities.Cart;
 import model.dataccess.AccountAccess;
 import model.dataccess.ItemsAccess;
 
+import view.ProductRegistrationView;
 import view.IntelligentReportView;
 
 import view.OrderView;
@@ -219,12 +220,14 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
+					new ProductRegistrationView();
+					
 					new IntelligentReportView();
 					
 					OrderView order_view_obj = new OrderView();
 					
 					
-					AccountAccess account_access_obj = new AccountAccess("eric");
+					AccountAccess account_access_obj = new AccountAccess(userName);
 					
 					ItemsAccess item_access_obj = new ItemsAccess();
 					//item_access_obj.add_new_item_to_db("Sprite", 2.99, true);
@@ -237,6 +240,10 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 					
 					cart_obj.add_item("Cheeseburger");
 					cart_obj.add_item("Beef Taco");
+					cart_obj.add_item("Chicken Taco");
+					cart_obj.add_item("Coke");
+					
+
 					
 					System.out.println(cart_obj.get_subtotal() + " --- " + cart_obj.get_discounted_total() + " --- " + cart_obj.get_discount_rate());
 

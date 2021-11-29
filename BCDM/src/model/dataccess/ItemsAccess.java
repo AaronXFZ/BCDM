@@ -38,6 +38,8 @@ public class ItemsAccess {
 			
 			item_price_map.put(item_name, item_price);
 		}
+		
+		session.close();
 				
 	}
 	
@@ -94,6 +96,8 @@ public class ItemsAccess {
 		session.save(new_item);
 		
 		session.getTransaction().commit();
+		
+		session.close();
 	}
 	
 	

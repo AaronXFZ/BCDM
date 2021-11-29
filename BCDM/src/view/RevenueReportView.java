@@ -66,6 +66,22 @@ public class RevenueReportView extends JFrame {
 	}
 
 	private void buildUI() {
+		
+		for (String item_name_key : items_quantity.keySet()) {
+
+			String item_name = item_name_key;
+			
+            int quantity = items_quantity.get(item_name_key);
+            
+ 
+            
+            String individual_row = item_name + "\t" + quantity + "\t";
+            
+            System.out.println(item_name_key + " ****************** individual_row ====== " +  individual_row);
+            
+            //this.panel2.add(new JLabel(individual_row));
+
+        }
 
 		this.panel1.add(this.lblUserName);
 		this.panel1.add(this.lbl_most_pop_item);
@@ -89,9 +105,9 @@ public class RevenueReportView extends JFrame {
 	            
 	            String individual_row = item_name + "\t" + quantity + "\t" + item_price;;
 	            
-	            System.out.println("individual_row ====== " +  individual_row);
+	            System.out.println("****************** individual_row ====== " +  individual_row);
 	            
-	            this.panel2.add(new JLabel(individual_row));
+	            //this.panel2.add(new JLabel(individual_row));
 
 	        }
 			

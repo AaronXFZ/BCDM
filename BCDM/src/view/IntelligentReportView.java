@@ -20,7 +20,7 @@ import view.RevenueReportView;
 @SuppressWarnings("serial")
 public class IntelligentReportView extends JFrame implements ActionListener {
 
-	Intelligent_Report intel_report_obj = new Intelligent_Report();
+	
 	
 	private JButton buttonSubmit, buttonClear, buttonRegister;
 
@@ -86,6 +86,8 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 			
 			//populates hashmap with items sold (not filtered)
 			try {
+				Intelligent_Report intel_report_obj = new Intelligent_Report();
+				
 				intel_report_obj.record_ordered_items_onto_map();
 				intel_report_obj.get_all_items_ordered(); // hash map of entire list
 			} catch (ClassNotFoundException | SQLException e) {
@@ -99,8 +101,18 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 			{	
 				//populates hashmap with items sold (not filtered)
 				try {
+					Intelligent_Report intel_report_obj = new Intelligent_Report();
+					
 					intel_report_obj.record_ordered_items_onto_map();
 					intel_report_obj.get_all_items_ordered(); // hash map of entire list
+					
+					new RevenueReportView(
+							"",
+							intel_report_obj.get_all_items_ordered(),
+							intel_report_obj.get_most_sold_item_all(),
+							intel_report_obj.get_total_revenue_all()
+							);
+					
 				} catch (ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -110,12 +122,7 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 				//intel_report_obj.get_most_sold_item_all(); --> gives a hashmap of all items sold (not filtered)
 				//intel_report_obj.get_total_revenue_all();  --> gives the total_revenue from the hashmap above
 				
-				new RevenueReportView(
-						"",
-						intel_report_obj.get_all_items_ordered(),
-						intel_report_obj.get_most_sold_item_all(),
-						intel_report_obj.get_total_revenue_all()
-						);
+				
 				
 			}
 			else
@@ -123,8 +130,17 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 				System.out.println("dfdfdfsdfsfsdfsfsfAAA");
 				//populates hashmap with items sold (filtered by userName)
 				try {
+					Intelligent_Report intel_report_obj = new Intelligent_Report();
+					
 					intel_report_obj.record_ordered_items_onto_map_by_username(userName);
 					System.out.println("KLIIIL ME = " + intel_report_obj.get_all_items_ordered_by_username().get("Cheeseburger"));
+					
+					new RevenueReportView(
+							userName,
+							intel_report_obj.get_all_items_ordered_by_username(),
+							intel_report_obj.get_most_sold_item_by_username(),
+							intel_report_obj.get_total_revenue_username()
+							);
 					
 				} catch (ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
@@ -133,12 +149,7 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 				
 
 				
-				new RevenueReportView(
-						userName,
-						intel_report_obj.get_all_items_ordered_by_username(),
-						intel_report_obj.get_most_sold_item_by_username(),
-						intel_report_obj.get_total_revenue_username()
-						);
+				
 			}
 			
 		} 
