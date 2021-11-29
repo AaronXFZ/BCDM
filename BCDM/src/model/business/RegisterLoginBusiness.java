@@ -221,35 +221,35 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 				else
 				{
 						
-					new ProductRegistrationView();
+					new ProductRegistrationView(); //showing product registration view
 					
-					new IntelligentReportView();
+					new IntelligentReportView();	//Showing intelligent report
 					
-					OrderView order_view_obj = new OrderView();
+					OrderView order_view_obj = new OrderView();	//Showing the main ordering screen
 					
 					
-					AccountAccess account_access_obj = new AccountAccess(userName);
-					
-					ItemsAccess item_access_obj = new ItemsAccess();
-					//item_access_obj.add_new_item_to_db("Sprite", 2.99, true);
-					
-					System.out.println("\nAll items = " + item_access_obj.get_all_online_items().get(0).get_isBeverage());
-					
-					System.out.println("\nONE items = " + item_access_obj.get_online_item("Chicken Taco").get_price());
-					
-					Cart cart_obj = new Cart(user);
-					
-					cart_obj.add_item("Cheeseburger");
-					cart_obj.add_item("Beef Taco");
-					cart_obj.add_item("Chicken Taco");
-					cart_obj.add_item("Coke");
-					
-
-					
-					System.out.println(cart_obj.get_subtotal() + " --- " + cart_obj.get_discounted_total() + " --- " + cart_obj.get_discount_rate());
-
-					OrderAccess orderAccess_obj = new OrderAccess(userName);
-					orderAccess_obj.submit_order(cart_obj);
+//					AccountAccess account_access_obj = new AccountAccess(userName);
+//					
+//					ItemsAccess item_access_obj = new ItemsAccess();
+//					//item_access_obj.add_new_item_to_db("Sprite", 2.99, true);
+//					
+//					System.out.println("\nAll items = " + item_access_obj.get_all_online_items().get(0).get_isBeverage());
+//					
+//					System.out.println("\nONE items = " + item_access_obj.get_online_item("Chicken Taco").get_price());
+//					
+//					Cart cart_obj = new Cart(user);
+//					
+//					cart_obj.add_item("Cheeseburger");
+//					cart_obj.add_item("Beef Taco");
+//					cart_obj.add_item("Chicken Taco");
+//					cart_obj.add_item("Coke");
+//					
+//
+//					
+//					System.out.println(cart_obj.get_subtotal() + " --- " + cart_obj.get_discounted_total() + " --- " + cart_obj.get_discount_rate());
+//
+//					OrderAccess orderAccess_obj = new OrderAccess(userName);
+//					orderAccess_obj.submit_order(cart_obj);
 					
 					//new LoginSuccessView(userName);
 					dispose();

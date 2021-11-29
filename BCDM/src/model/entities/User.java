@@ -39,9 +39,6 @@ public class User {
     @Column(name="start_date")
     private Date membership_date;
     
-    @Column(name="account_id")
-    private int associated_account_id = 1;
-    
     @Column(name="is_professor")
     private boolean is_professor;
         

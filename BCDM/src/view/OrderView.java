@@ -3,6 +3,7 @@ package view;
 import model.dataccess.ItemsAccess; // Obtains the menu from the DB
 import model.entities.Cart;	// Use to add carted items onto list to then be pushed to DB
 import model.entities.OnlineItem;
+import model.entities.SubmitOrder;
 import model.entities.User; // Associates order with the User for the DB 
 
 import java.awt.BorderLayout;
@@ -148,6 +149,9 @@ public class OrderView {
 		JButton submitButton = new JButton("Submit Order");
 		
 		submitButton.addActionListener(ae -> {
+			
+			submit_order();	//submits the order to the DB
+			
 			JOptionPane.showMessageDialog(orderPanel, "Order Submited");
 			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
 		});
@@ -291,6 +295,10 @@ public class OrderView {
 		toAdd.setPreferredSize(toAddLabelSize);
 		selectedItemsListPanel.add(toAdd);
 		selectedMenuItemLabels.put(menuItemName, toAdd);
+		
+		//Adds item to cart container
+		cart_obj.add_item(menuItemName);
+		
 	}
 	
 	private void removeSelectedMenuItemLabel(String menuItemName) {
@@ -302,6 +310,9 @@ public class OrderView {
 			selectedItemsListPanel.remove(toRemove);
 			selectedMenuItemLabels.remove(menuItemName);
 			selectedItemsListPanel.updateUI();
+			
+			//Removes item from cart container
+			cart_obj.remove_item(menuItemName);
 		}
 	}
 	
@@ -421,6 +432,11 @@ public class OrderView {
 			
 		}
 		return sb.toString();
+	}
+	
+	void submit_order()
+	{
+		new SubmitOrder(this.cart_obj);
 	}
 //	public static void main(String[] args) {
 //		SwingUtilities.invokeLater(orderPage::new);

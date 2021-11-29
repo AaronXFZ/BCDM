@@ -263,10 +263,13 @@ public class Intelligent_Report {
 			//Loop through all ordered items hashmap (items_record)
 			//Insert items_record's key (aka item's name) as a key into item_price_map hashmap to get price
 			for (String item_name_key : items_record.keySet()) {
-	            
-				Double item_price = item_price_map.get(item_name_key);
-				
-				total_revenue_username += item_price;
+	            System.out.println(item_name_key + " -Z- " + item_price_map.get(item_name_key));
+				if(item_price_map.get(item_name_key) != null)
+				{
+					Double item_price = item_price_map.get(item_name_key);
+					
+					total_revenue_username += item_price;
+				}
 	        }
 			
 		} catch (ClassNotFoundException | SQLException e) {
