@@ -19,7 +19,7 @@ public class AccountAccess {
 	
 	//Parameters: username PK to find an account
 	//Look in the users table and make its ID with the professor OR student table
-	public AccountAccess(String username, String account_type) throws ClassNotFoundException, SQLException
+	public AccountAccess(String username) throws ClassNotFoundException, SQLException
 	{
 		Session session = conn_factory_hiber.getSession();
 
@@ -33,6 +33,11 @@ public class AccountAccess {
 	public User get_user_from_backend()
 	{
 		return user_obj;
+	}
+	
+	public boolean is_professor()
+	{
+		return user_obj.get_is_professor();
 	}
 	
 }

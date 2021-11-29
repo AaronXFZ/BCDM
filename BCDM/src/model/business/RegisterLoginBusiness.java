@@ -41,7 +41,7 @@ import model.entities.Cart;
 import model.dataccess.AccountAccess;
 import model.dataccess.ItemsAccess;
 
-
+import view.IntelligentReportView;
 
 import view.OrderView;
 
@@ -219,10 +219,12 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
-					OrderView order_view_obj = new OrderView();
-
+					new IntelligentReportView();
 					
-					AccountAccess account_access_obj = new AccountAccess("eric", "professor");
+					OrderView order_view_obj = new OrderView();
+					
+					
+					AccountAccess account_access_obj = new AccountAccess("eric");
 					
 					ItemsAccess item_access_obj = new ItemsAccess();
 					//item_access_obj.add_new_item_to_db("Sprite", 2.99, true);

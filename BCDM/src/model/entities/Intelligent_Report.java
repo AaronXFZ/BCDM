@@ -10,6 +10,8 @@ import java.util.List;
 import org.hibernate.Session;
 
 import model.dataccess.ReceiptAccess;
+import model.dataccess.ItemsAccess;
+
 
 //Show all or by user
 //filters by date
@@ -17,7 +19,9 @@ public class Intelligent_Report {
 	
 	ConnectionFactory_Hibernate conn_factory = new ConnectionFactory_Hibernate();
 	
-	private double total_revenue;
+	private double total_revenue_all;
+	private double total_revenue_username;
+	
 	private Date lowerbnd_date;
 	private Date upperbnd_date;
 	private String username;
@@ -37,9 +41,7 @@ public class Intelligent_Report {
 	
 	//ReceiptAccess receipt_access_obj = new ReceiptAccess();
 	
-	public Intelligent_Report() {
-		
-	}
+	public Intelligent_Report() {}
 	
 	public void set_lowerbnd_date(Date lowerbnd_date)
     {
@@ -59,71 +61,102 @@ public class Intelligent_Report {
     
     public void record_ordered_items_onto_map() throws ClassNotFoundException, SQLException
     {
-    	items_record.clear();
+    	try
+		{
+	    	items_record.clear();
+	    	
+	    	Session session = conn_factory.getSession();
+	    	session.beginTransaction();
+	    	
+	    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
+	    	
+	    	for(int i = 0; i < orders.size(); i++)
+	    	{
+	    		String item_name = orders.get(i).get_item_name();
+	    		
+	    		if (items_record.get(item_name) == null)
+	    		{
+	    			Integer first = 1;
+	    			items_record.put(item_name, first);
+	    		}
+	    		else
+	    		{
+	    			int new_quantity = items_record.get(item_name) + 1;
+	    			
+	    			items_record.put(item_name, new_quantity);
+	    			
+	    		}
+	    		
+	    		if(items_record.get(item_name) > quantity_most_profitable_item_all)
+	    		{
+	    			quantity_most_profitable_item_all = items_record.get(item_name);
+	    			name_most_profitable_item_all = item_name;
+	    		}
+	    		
+	    	}
     	
-    	Session session = conn_factory.getSession();
-    	session.beginTransaction();
-    	
-    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
-    	
-    	for(int i = 0; i < orders.size(); i++)
-    	{
-    		String item_name = orders.get(i).get_item_name();
-    		
-    		if (items_record.get(item_name) == null)
-    		{
-    			items_record.put(item_name, 1);
-    		}
-    		else
-    		{
-    			int new_quantity = items_record.get(item_name) + 1;
-    			
-    			items_record.put(item_name, new_quantity);
-    			
-    		}
-    		
-    		if(items_record.get(item_name) > quantity_most_profitable_item_all)
-    		{
-    			quantity_most_profitable_item_all = items_record.get(item_name);
-    			name_most_profitable_item_all = item_name;
-    		}
-    		
-    	}
+   
+    	} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			conn_factory.get_factory().close();
+		}
     }
     
     public void record_ordered_items_onto_map_by_username(String username) throws ClassNotFoundException, SQLException
     {
-    	items_record_by_username.clear();
-    	
-    	Session session = conn_factory.getSession();
-    	session.beginTransaction();
-    	
-    	List<ItemOrder> orders = session.createQuery("from ItemOrder where username = '" + username + "'").getResultList();
-    	
-    	for(int i = 0; i < orders.size(); i++)
-    	{
-    		String item_name = orders.get(i).get_item_name();	
-    		
-    		if (items_record_by_username.get(item_name) == null)
-    		{
-    			items_record_by_username.put(item_name, 1);
-    		}
-    		else
-    		{
-    			int new_quantity = items_record_by_username.get(item_name) + 1;
-    			
-    			items_record_by_username.put(item_name, new_quantity);
-    			
-    		}
-    		
-    		if(items_record.get(item_name) > quantity_most_profitable_item_by_username)
-    		{
-    			quantity_most_profitable_item_by_username = items_record.get(item_name);
-    			name_most_profitable_item_by_username = item_name;
-    		}
-    		
-    	}
-    }
+    	try
+		{
+	    	items_record_by_username.clear();
+	    	
+	    	Session session = conn_factory.getSession();
+	    	session.beginTransaction();
+	    	
+	    	List<ItemOrder> orders = session.createQuery("from ItemOrder where username = '"+ username + "'").getResultList();
+	    	
+	    	System.out.println("ORDER ==== fddf === " + orders.get(1).get_item_name());
+	    	for(int i = 0; i < orders.size(); i++)
+	    	{
+	    		String item_name = orders.get(i).get_item_name();	
+	    		
+	    		if (items_record_by_username.get(item_name) == null)
+	    		{
+	    			Integer first = 1;
+	    			
+	    			items_record_by_username.put(item_name, first);
+	    		}
+	    		else
+	    		{
+	    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+	    			
+	    			items_record_by_username.put(item_name, new_quantity);
+	    			
+	    		}
+	    		System.out.println("ITEMNAME === " + items_record_by_username.get(item_name));
+	    		
+	    		if(items_record_by_username.get(item_name) > quantity_most_profitable_item_by_username)
+	    		{
+	    			quantity_most_profitable_item_by_username = items_record.get(item_name);
+	    			name_most_profitable_item_by_username = item_name;
+	    		}
+	    		
+	    	}
+	    	
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			conn_factory.get_factory().close();
+		}
+	}
+    
     
     public int get_quantity_by_item_name(String item_name)
     {
@@ -135,6 +168,11 @@ public class Intelligent_Report {
     	return items_record;
     }
     
+    public HashMap<String, Integer> get_all_items_ordered_by_username()
+    {
+    	return items_record_by_username;
+    }
+    
     public String get_most_sold_item_all()
     {
     	return name_most_profitable_item_all + ": " + quantity_most_profitable_item_all;
@@ -144,5 +182,66 @@ public class Intelligent_Report {
     {
     	return name_most_profitable_item_by_username + ": " + quantity_most_profitable_item_by_username;
     }
+    
+    public double get_total_revenue_all()
+    {	total_revenue_all = 0.0;
+        	
+	    try {
+			
+			// items_record -> contains all items ordered by quantity
+			// item_price_map -> contains every item's price 
+			
+			ItemsAccess items_access_obj = new ItemsAccess();
+			
+			HashMap<String, Double> item_price_map = items_access_obj.get_online_item_hash_map();
+			
+			//Loop through all ordered items hashmap (items_record)
+			//Insert items_record's key (aka item's name) as a key into item_price_map hashmap to get price
+			for (String item_name_key : items_record.keySet()) {
+	            
+				Double item_price = item_price_map.get(item_name_key);
+				
+				total_revenue_username += item_price;
+	        }
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return total_revenue_all;
+    	
+    }
+    
+    public double get_total_revenue_username()
+    {	total_revenue_username = 0.0;
+        	
+    	try {
+    		
+    		// items_record -> contains all items ordered by quantity
+    		// item_price_map -> contains every item's price 
+    		
+    		ItemsAccess items_access_obj = new ItemsAccess();
+			
+    		HashMap<String, Double> item_price_map = items_access_obj.get_online_item_hash_map();
+			
+    		//Loop through all ordered items hashmap (items_record)
+    		//Insert items_record's key (aka item's name) as a key into item_price_map hashmap to get price
+    		for (String item_name_key : items_record_by_username.keySet()) {
+                
+    			Double item_price = item_price_map.get(item_name_key);
+    			
+    			total_revenue_username += item_price;
+            }
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return total_revenue_username;
+    	
+    }
+   
 	
 }

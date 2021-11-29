@@ -30,6 +30,10 @@ public class ConnectionFactory_Hibernate {
 	
 	public ConnectionFactory_Hibernate() {}
 	
+	public SessionFactory get_factory()
+	{
+		return factory;
+	}
 	public Session getSession() throws ClassNotFoundException, SQLException
 	{
 		return factory.getCurrentSession();
@@ -37,6 +41,8 @@ public class ConnectionFactory_Hibernate {
 	
 	public void restart_session()
 	{
+		factory.close();
+		
 		factory = new Configuration().
 	            configure("hibernate.cfg.xml")
 	            .addAnnotatedClass(User.class)

@@ -25,6 +25,8 @@ public class ItemOrder {
 	@Column(name="item_name", nullable=false)
 	private String item_name;
 	
+	public ItemOrder() {}
+	
 	public ItemOrder(String username, String date, String time, String item_name, int order_id) 
 	{
 		this.username = username;
