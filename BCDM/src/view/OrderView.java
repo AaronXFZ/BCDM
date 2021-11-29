@@ -2,6 +2,7 @@ package view;
 
 import model.dataccess.ItemsAccess; // Obtains the menu from the DB
 import model.entities.Cart;	// Use to add carted items onto list to then be pushed to DB
+import model.entities.OnlineItem;
 import model.entities.User; // Associates order with the User for the DB 
 
 import java.awt.BorderLayout;
@@ -31,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 //This class contains the GUI interface for making an order
@@ -42,14 +44,27 @@ public class OrderView {
 	
 	private List<String> items_ordered = new ArrayList(); //Stores the current items in cart
 	
-	
+	List<OnlineItem> local_full_menu = new ArrayList();
 	
 	private JFrame frame;
 	private String selectionTab;
 	private JPanel selectionPanel;
+	private JPanel currentMenuItemsPanel;
+	private JPanel selectedItemsListPanel;
+	private JLabel priceLable;
+	private JCheckBox professorDiscount;
+	private ActionListener menuItemActionListener;
+
+	private int currentPrice;
 	private HashMap<String, JButton> selectionTabMap;
+	private HashMap<String, JLabel> selectedMenuItemLabels;
+	private HashMap<String, Integer> menuItemNameToPrice;
+	private List<String> selectedMenuItems;
 	public Color bronco = new Color(40,134,65);
+	
 	public OrderView() {
+		store_food_menu_locally();	//pulls food menu from the DB
+		
 		initializeDefaultSetting();
 		frame = new JFrame("Menu");
 		frame.setLayout(new BorderLayout());
@@ -64,47 +79,98 @@ public class OrderView {
 		
 	}
 	
-	private void initializeDefaultSetting() {
-		selectionTab = "entire_menu";
-		selectionTabMap = new HashMap<>();
+	private void store_food_menu_locally()
+	{
+		try {
+			for(int i = 0; i < cart_obj.get_ALL_available_items().get_all_online_items().size(); i++)
+			{
+				local_full_menu.add(cart_obj.get_ALL_available_items().get_all_online_items().get(i));
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	private void initializeDefaultSetting() {
+		selectionTab = "entiremenu";
+		currentPrice = 0;
+		selectionTabMap = new HashMap<>();
+		selectedMenuItemLabels = new HashMap<>();
+		selectedMenuItems = new ArrayList<>();
+		initializePriceMap();
+		
+	}
+	
+	private void initializePriceMap() {
+		//connection to the db hash map here
+		//the following is just fake data for testing
+		
+		try {
+			menuItemNameToPrice = cart_obj.get_ALL_available_items().get_online_item_hash_map_INTEGER_PRICES();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		menuItemNameToPrice = new HashMap<>();
+//		menuItemNameToPrice.put("Calamari", 699);
+//		menuItemNameToPrice.put("Fries", 599);
+//		menuItemNameToPrice.put("Potato", 499);
+//		menuItemNameToPrice.put("Chicken Wings", 899);
+//		menuItemNameToPrice.put("Onion Rings", 599);
+//		menuItemNameToPrice.put("Ribeye Steak", 2099);
+//		menuItemNameToPrice.put("New York Steak", 2399);
+//		menuItemNameToPrice.put("Lobster", 4099);
+//		menuItemNameToPrice.put("Coke", 199);
+//		menuItemNameToPrice.put("Sprite", 199);
+//		menuItemNameToPrice.put("Orange Juice", 299);
+//		menuItemNameToPrice.put("Rice", 199);
+		
+	}
+	
 	private JPanel createOrderPanel() {
 		String orderName = "Order     Someone";
-		String order1 = "Chicken Wings(5 pcs)    $11.99";
-		String order2 = "Fountain Drinks         $1.49 ";
-		
-		//Call cart_obj in here to replace String order1 and order2
-
-		
 		JPanel orderPanel = new JPanel();
 		
 		orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.PAGE_AXIS));
 		orderPanel.add(new JLabel(orderName));
 		orderPanel.add(new JLabel("Items"));
-		orderPanel.add(new JLabel(order1));
-		orderPanel.add(new JLabel(order1));
-		orderPanel.add(new JLabel(order2));
-		orderPanel.add(new JLabel(order2));
+		orderPanel.add(createSelectedItemsListPanel());
 		
 		orderPanel.add(new JLabel("Total Price: "));
-		orderPanel.add(new JLabel("$26.96"));
-		
-		orderPanel.add(new JCheckBox("Professor Discounts", true));
+		priceLable = new JLabel(toPriceString(currentPrice));
+
+		orderPanel.add(priceLable);
+		professorDiscount = new JCheckBox("Professor Discounts (10% off)", false);
+		professorDiscount.addActionListener(menuItemActionListener);
+		orderPanel.add(professorDiscount);
 		JButton submitButton = new JButton("Submit Order");
-		orderPanel.add(submitButton);
-		ActionListener submitOrderActionListener = new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				//Insert Access Order here to submit the order
-				
-				
-				JOptionPane.showMessageDialog(orderPanel, "Order Submited");
-				
-			}
-		};
 		
+		submitButton.addActionListener(ae -> {
+			JOptionPane.showMessageDialog(orderPanel, "Order Submited");
+			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
+		});
+		JButton printReceipt = new JButton("Print Receipt");
+		printReceipt.addActionListener(ae -> {
+			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
+		});
+		JButton printHistory = new JButton("Print History");
+		printHistory.addActionListener(ae -> {
+			JOptionPane.showMessageDialog(orderPanel, generateHistoryInformation());
+		});
+		orderPanel.add(submitButton);
+		orderPanel.add(printReceipt);
+		orderPanel.add(printHistory);
 		orderPanel.setBorder(BorderFactory.createLineBorder(bronco, 3));
-		submitButton.addActionListener(submitOrderActionListener);
 		return orderPanel;
+	}
+	
+	private JPanel createSelectedItemsListPanel() {
+		selectedItemsListPanel = new JPanel();
+		selectedItemsListPanel.setLayout(new BoxLayout(selectedItemsListPanel, BoxLayout.PAGE_AXIS));
+		selectedItemsListPanel.setPreferredSize(new Dimension(200,800));
+		return selectedItemsListPanel;
 	}
 	
 	private JPanel createSelectionPanel() {
@@ -119,8 +185,8 @@ public class OrderView {
 	}
 	
 	private JPanel createSelectionTabTop() {
-		JPanel selectionPanel = new JPanel();
-		selectionPanel.setLayout(new GridLayout(1,4,3,3));
+		JPanel CategorySelectionPanel = new JPanel();
+		CategorySelectionPanel.setLayout(new GridLayout(1,4,3,3));
 		ActionListener categorySelectionActionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				selectionTabMap.get(selectionTab).setEnabled(true);
@@ -132,89 +198,231 @@ public class OrderView {
 			}
 			
 		};
-		selectionTabMap.put("entire_menu", new JButton("Full Menu"));
-		selectionPanel.add(selectionTabMap.get("entire_menu"));
+		selectionTabMap.put("entiremenu", new JButton("EntireMenu"));
+		CategorySelectionPanel.add(selectionTabMap.get("entiremenu"));
 		selectionTabMap.put("dishes", new JButton("Dishes"));
-		selectionPanel.add(selectionTabMap.get("dishes"));
+		CategorySelectionPanel.add(selectionTabMap.get("dishes"));
 		selectionTabMap.put("beverages", new JButton("Beverages"));
-		selectionPanel.add(selectionTabMap.get("beverages"));
+		CategorySelectionPanel.add(selectionTabMap.get("beverages"));
 		
-		selectionTabMap.values().stream().forEach(button -> button.setActionCommand(button.getText()));
-		selectionTabMap.values().stream().forEach(button -> button.addActionListener(categorySelectionActionListener));
+		selectionTabMap.values().forEach(button -> button.setActionCommand(button.getText()));
+		selectionTabMap.values().forEach(button -> button.addActionListener(categorySelectionActionListener));
 		
 		selectionTabMap.get(selectionTab).setEnabled(false);
 		
-		return selectionPanel;
+		return CategorySelectionPanel;
 	}
 	
-	private JPanel createActionPanel() {
-		return null;
-	}
+
 	
+
 	private void generateMenuItems() {
-		//JPanel menuItemsPanel = new JPanel(new GridLayout(4, 8, 3, 3));
+		menuItemActionListener = ae -> {
+			JButton menuItemButton = (JButton) ae.getSource();
+			String itemName = menuItemButton.getActionCommand();
+			if(itemName == null) {
+				System.out.println("The item name is empty");
+			}
+			else {
+				System.out.println(itemName);
+			}
+		
+			if(selectedMenuItems.contains(itemName)) {
+				selectedMenuItems.remove(itemName);
+				menuItemButton.setBorder(UIManager.getBorder("Button.border"));
+				removeSelectedMenuItemLabel(itemName);
+				currentPrice-=menuItemNameToPrice.get(itemName);
+				if (!professorDiscount.isSelected()) {
+					priceLable.setText(toPriceString(currentPrice));
+				}
+				else {
+					priceLable.setText(toPriceString((int)(currentPrice*0.9)));
+				}
+			}
+			else {
+				selectedMenuItems.add(itemName);
+				menuItemButton.setBorder(BorderFactory.createLineBorder(bronco,4));
+				addSelectedMenuItemButton(itemName);
+				currentPrice+=menuItemNameToPrice.get(itemName);
+				if (!professorDiscount.isSelected()) {
+					priceLable.setText(toPriceString(currentPrice));
+				}
+				else {
+					priceLable.setText(toPriceString((int)(currentPrice*0.9)));
+				}
+				//select the item
+			}
+		};
 		List<String> categoryItems = getMenuItemsFromCategory(selectionTab);
 		JPanel menuItemsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		menuItemsPanel.setPreferredSize(new Dimension(860,860));
 		Font buttonFont = new Font("Arial", Font.PLAIN, 20);
 		//menuItemsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		for (int x = 0; x<categoryItems.size(); x++) {
-			//String itemText = "Fried Chicken";
-			JButton button = new JButton("<html><center>" + categoryItems.get(x) + "</center></html>");
+			String menuItemName = categoryItems.get(x);
+			JButton button = new JButton("<html><center>" + menuItemName + "</center></html>");
 			button.setFont(buttonFont);
 			button.setPreferredSize(new Dimension(143, 110));
+			button.setActionCommand(menuItemName);
+			button.addActionListener(menuItemActionListener);
+			if(selectedMenuItems.contains(menuItemName))  
+			{
+				button.setBorder(BorderFactory.createLineBorder(bronco, 4));
+			}
 			menuItemsPanel.add(button);
 		}
+		
+		if(currentMenuItemsPanel != null) {
+			selectionPanel.remove(currentMenuItemsPanel);
+		}
+		
 		selectionPanel.add(menuItemsPanel, FlowLayout.CENTER);
+		currentMenuItemsPanel = menuItemsPanel;
 		selectionPanel.invalidate();
 		selectionPanel.validate();
 		//return menuItemsPanel;
 	}
 	
-	private List<String> getMenuItemsFromCategory(String category){
-		List<String> results = new ArrayList();
-		
-		try {
-			ItemsAccess item_access_obj = new ItemsAccess();
+	private void addSelectedMenuItemButton(String menuItemName) {
+		JLabel toAdd = new JLabel("<html><center>" + menuItemName+ "..."+menuItemNameToPrice.getOrDefault(menuItemName, 0)+ "</center></html>");
+		Dimension toAddLabelSize = new Dimension(200,40);
+		toAdd.setMaximumSize(toAddLabelSize);
+		toAdd.setMinimumSize(toAddLabelSize);
+		toAdd.setPreferredSize(toAddLabelSize);
+		selectedItemsListPanel.add(toAdd);
+		selectedMenuItemLabels.put(menuItemName, toAdd);
+	}
+	
+	private void removeSelectedMenuItemLabel(String menuItemName) {
+		JLabel toRemove = selectedMenuItemLabels.getOrDefault(menuItemName, null);
+		if (toRemove == null) {
+			System.out.println("Tried to remove " + menuItemName + " but it is not in the list.");
+		}
+		else {
+			selectedItemsListPanel.remove(toRemove);
+			selectedMenuItemLabels.remove(menuItemName);
+			selectedItemsListPanel.updateUI();
+		}
+	}
+	
+	
+	private List<String> getMenuItemsFromCategory(String category) {
+		List<String> results = new ArrayList<>();
+		//access to the database
+		if(category.equalsIgnoreCase("entiremenu")) {
 			
-			
-			for(int i = 0; i < item_access_obj.get_all_online_items().size(); i++)
+			for(int i = 0; i < local_full_menu.size(); i++)
 			{
-				String item_name = item_access_obj.get_all_online_items().get(i).get_name();
 				
+				String item_name = local_full_menu.get(i).get_name();
 				
 				results.add(item_name);
-	
+				
 			}
 			
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			results.add("Calamari");
+//			results.add("Fries");
+//			results.add("Potato");
+//			results.add("Chicken Wings");
+//			results.add("Onion Rings");
+		}
+		else if(category.equalsIgnoreCase("Dishes")) {
+			
+			for(int i = 0; i < local_full_menu.size(); i++)
+			{
+				if(! local_full_menu.get(i).get_isBeverage())
+				{
+					String item_name = local_full_menu.get(i).get_name();
+					
+					results.add(item_name);
+				}
+			}
+
+//			results.add("Ribeye Steak");
+//			results.add("New York Steak");
+//			results.add("Lobster");
+
 		}
 		
-		
-		
-		
-		
-//		//access to the database
-//		if(category.equalsIgnoreCase("entire_menu")) {
-//			results.add("Fried Chicken");
-//			results.add("Fried Chicken");
-//			results.add("Fried Chicken");
-//			results.add("Fried Chicken");
-//			results.add("Fried Chicken");
-//		}
-//		else {
-//			results.add("Fried Duck");
-//			results.add("Fried Duck");
-//			results.add("Fried Duck");
-//			results.add("Fried Duck");
-//			results.add("Fried Duck");
-//		}
+		else if(category.equalsIgnoreCase("Beverages")) {
+			
+			for(int i = 0; i < local_full_menu.size(); i++)
+			{
+				if(local_full_menu.get(i).get_isBeverage())
+				{
+					String item_name = local_full_menu.get(i).get_name();
+					
+					results.add(item_name);
+				}
+			}
+//			results.add("Coke");
+//			results.add("Sprite");
+//			results.add("Orange Juice");
+//			results.add("Rice");
+		}
+
 		
 		return results;
 	}
 	
-	public static void main(String[] args) {
-		//SwingUtilities.invokeLater(OrderView::new);
+	private static String toPriceString(int priceCents) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("$ ");
+		sb.append(priceCents/100);
+		sb.append(".");
+		String cents = String.valueOf(priceCents%100);
+		if(cents.length() == 1) {
+			cents = "0" + cents;
+		}
+		sb.append(cents);
+		return sb.toString();
+		
 	}
+	
+	private String generateReceiptString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Receipt: \n\n");
+		for(String selectedItem: selectedMenuItems) {
+			sb.append(selectedItem);
+			sb.append(" - ");
+			if (!professorDiscount.isSelected()) {
+				sb.append(toPriceString(menuItemNameToPrice.getOrDefault(selectedItem, 0)));
+			}
+			else {
+				sb.append(toPriceString((int)((menuItemNameToPrice.getOrDefault(selectedItem, 0))*0.9)));
+			}
+			
+			sb.append("\n");
+		}
+		if (professorDiscount.isSelected()) {
+			sb.append("\nEmployee got 10% discount.\n");
+		}
+		
+		sb.append("\n");
+		sb.append("Total: \n");
+		if (!professorDiscount.isSelected()) {
+			sb.append(toPriceString(currentPrice));
+		}
+		else {
+			sb.append(toPriceString((int)(currentPrice*0.9)));
+		}
+		return sb.toString();
+	}
+	//This part is to generate the history, you can modify the for loop to get the desired data from db.
+	private String generateHistoryInformation() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("History Information: \n\n");
+		
+		for(String selectedItem: menuItemNameToPrice.keySet()) {
+			sb.append("Date Here ");
+			sb.append(selectedItem);
+			sb.append(" - ");
+			sb.append("$ Price Here \n");
+			
+		}
+		return sb.toString();
+	}
+//	public static void main(String[] args) {
+//		SwingUtilities.invokeLater(orderPage::new);
+//	}
 }

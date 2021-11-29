@@ -21,6 +21,7 @@ public class ItemsAccess {
 	
 	private HashMap<String, Double> item_price_map = new HashMap<String, Double>();
 
+	private HashMap<String, Integer> item_price_map_INTEGER_PRICES = new HashMap<String, Integer>();
 	
 	public ItemsAccess() throws ClassNotFoundException, SQLException
 	{
@@ -37,6 +38,7 @@ public class ItemsAccess {
 			Double item_price = online_items.get(i).get_price();
 			
 			item_price_map.put(item_name, item_price);
+			item_price_map_INTEGER_PRICES.put(item_name, (int)Math.round(item_price));
 		}
 		
 		session.close();
@@ -46,6 +48,11 @@ public class ItemsAccess {
 	public HashMap<String, Double> get_online_item_hash_map()
 	{
 		return item_price_map;
+	}
+	
+	public HashMap<String, Integer> get_online_item_hash_map_INTEGER_PRICES()
+	{
+		return item_price_map_INTEGER_PRICES;
 	}
 
 	public OnlineItem get_online_item_by_id(int item_id) throws ClassNotFoundException, SQLException

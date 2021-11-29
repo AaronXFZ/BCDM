@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+
 import model.entities.ProductRegistration;
 
 @SuppressWarnings("serial")
@@ -117,14 +118,35 @@ private void buildUI() {
 			ProductRegistration product_registration = new ProductRegistration();
 			
 			boolean item_already_exist = product_registration.register_product(product_name, price, is_beverage);
-			boolean user_agrees_to_change_price;
+			int user_agrees_to_change_price = -11234;
+			boolean user_has_update_item = false;
 			
+			//Prompts user if they want to edit an item's PRICE
+			//to be added to the Price History Table
 			if(item_already_exist)
 			{
-				
+				//PromptPriceChangeHistoryView prompt_change_price_obj = new PromptPriceChangeHistoryView();
+				//user_agrees_to_change_price = prompt_change_price_obj.query_user_for_price_change();
+
+				user_agrees_to_change_price = JOptionPane.showConfirmDialog(null, 
+						"This item already exist. Do you wish to update it?", 
+						"Choose", 
+						JOptionPane.YES_NO_OPTION
+						);
 			}
-			new SuccessView();
 			
+			if(!item_already_exist)
+			{
+				new SuccessView();
+			}
+			else if(user_agrees_to_change_price == JOptionPane.YES_OPTION)
+			{
+				product_registration.update_item_price(product_name, price, is_beverage);
+				user_has_update_item = true;
+			}
+			
+			if(user_has_update_item == true)
+				new SuccessView();
 		}
 		else if (event.getSource() == this.toggleButtonBeverage)
 		{

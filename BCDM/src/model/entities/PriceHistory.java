@@ -72,8 +72,10 @@ public class PriceHistory
 		
 		
 		try {
+			
 			PriceHistoryAccess price_hist_access = new PriceHistoryAccess();
 			return price_hist_access.get_all_price_history();
+			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

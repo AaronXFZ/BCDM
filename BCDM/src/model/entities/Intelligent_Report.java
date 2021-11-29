@@ -107,106 +107,55 @@ public class Intelligent_Report {
 		}
     }
     
-//    public void record_ordered_items_onto_map_by_username(String userName) throws ClassNotFoundException, SQLException
-//    {
-//    	System.out.println("userNameuserNameuserNameuserName userName = " + userName );
-//    	try
-//		{
-//	    	items_record.clear();
-//	    	
-//	    	Session session = conn_factory.getSession();
-//	    	session.beginTransaction();
-//	    	
-//	    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
-//	    	
-//	    	for(int i = 0; i < orders.size(); i++)
-//	    	{
-//	    		if(orders.get(i).get_username().equals(userName))
-//	    		{
-//		    		String item_name = orders.get(i).get_item_name();
-//		    		
-//		    		//System.out.println("i --- = " + orders.get(i).get_username() );
-//		    		
-//		    		if (items_record.get(item_name) == null)
-//		    		{
-//		    			Integer first = 1;
-//		    			items_record.put(item_name, first);
-//		    		}
-//		    		else
-//		    		{
-//		    			int new_quantity = items_record.get(item_name) + 1;
-//		    			
-//		    			items_record.put(item_name, new_quantity);
-//		    			
-//		    		}
-//		    		
-//		    		if(items_record.get(item_name) > quantity_most_profitable_item_all)
-//		    		{
-//		    			quantity_most_profitable_item_all = items_record.get(item_name);
-//		    			name_most_profitable_item_all = item_name;
-//		    		}
-//	    		}
-//	    		
-//	    	}
-//    	
-//   
-//    	} 
-//		catch (Exception e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		finally
-//		{
-//			conn_factory.get_factory().close();
-//		}
-//    }
-    
-    public void record_ordered_items_onto_map_by_username(String username) throws ClassNotFoundException, SQLException
+    public void record_ordered_items_onto_map_by_username(String userName) throws ClassNotFoundException, SQLException
     {
+    	System.out.println("userNameuserNameuserNameuserName userName = " + userName );
     	try
 		{
-	    	items_record_by_username.clear();
+    		items_record_by_username.clear();
 	    	
 	    	Session session = conn_factory.getSession();
 	    	session.beginTransaction();
 	    	
-	    	List<ItemOrder> orders = session.createQuery("from ItemOrder where username = 'eric'").getResultList();
-	    	
+	    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
 	    	
 	    	for(int i = 0; i < orders.size(); i++)
 	    	{
-	    		System.out.println("AAA!@#$$ = " + orders.get(i).get_username());
 	    		
-	    		String item_name = orders.get(i).get_item_name();	
-	    		System.out.println(i + " = ORDER ==== fddf === " + orders.get(i).get_item_name());
-	    		if (items_record_by_username.get(item_name) == null)
-	    		{
-	    			Integer first = 1;
-	    			
-	    			items_record_by_username.put(item_name, first);
-	    			
-	    			System.out.println("1st USERNAME ISERTION ==== " + items_record_by_username.get(item_name));
-	    		}
-	    		else
-	    		{
-	    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
-	    			
-	    			items_record_by_username.put(item_name, new_quantity);
-	    			
-	    			System.out.println("2nd USERNAME ISERTION ==== " + items_record_by_username.get(item_name));
-
-	    		}
+	    		System.out.println(orders.get(i).get_username() + " ====== " + userName + " ^^^ " +
+	    				orders.get(i).get_username().equals(userName));
 	    		
 	    		
-	    		if(items_record_by_username.get(item_name) > quantity_most_profitable_item_by_username)
+	    		if(orders.get(i).get_username().equals(userName))
 	    		{
-	    			quantity_most_profitable_item_by_username = items_record.get(item_name);
-	    			name_most_profitable_item_by_username = item_name;
+		    		String item_name = orders.get(i).get_item_name();
+		    		
+		    		System.out.println(item_name + " --- = " + orders.get(i).get_item_name() );
+		    		
+		    		if (items_record_by_username.get(item_name) == null)
+		    		{
+		    			Integer first = 1;
+		    			items_record_by_username.put(item_name, first);
+		    		}
+		    		else
+		    		{
+		    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+		    			
+		    			items_record_by_username.put(item_name, new_quantity);
+		    			
+		    		}
+		    		
+		    		if(items_record_by_username.get(item_name) > quantity_most_profitable_item_by_username)
+		    		{
+		    			quantity_most_profitable_item_by_username = items_record_by_username.get(item_name);
+		    			name_most_profitable_item_all = item_name;
+		    		}
 	    		}
 	    		
 	    	}
-	    	
-		} 
+    	
+   
+    	} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
@@ -215,8 +164,64 @@ public class Intelligent_Report {
 		{
 			conn_factory.get_factory().close();
 		}
-	}
+    }
     
+//    public void record_ordered_items_onto_map_by_username(String username) throws ClassNotFoundException, SQLException
+//    {
+//    	try
+//		{
+//	    	items_record_by_username.clear();
+//	    	
+//	    	Session session = conn_factory.getSession();
+//	    	session.beginTransaction();
+//	    	
+//	    	List<ItemOrder> orders = session.createQuery("from ItemOrder where username = 'eric'").getResultList();
+//	    	
+//	    	
+//	    	for(int i = 0; i < orders.size(); i++)
+//	    	{
+//	    		System.out.println("AAA!@#$$ = " + orders.get(i).get_username());
+//	    		
+//	    		String item_name = orders.get(i).get_item_name();	
+//	    		System.out.println(i + " = ORDER ==== fddf === " + orders.get(i).get_item_name());
+//	    		if (items_record_by_username.get(item_name) == null)
+//	    		{
+//	    			Integer first = 1;
+//	    			
+//	    			items_record_by_username.put(item_name, first);
+//	    			
+//	    			System.out.println("1st USERNAME ISERTION ==== " + items_record_by_username.get(item_name));
+//	    		}
+//	    		else
+//	    		{
+//	    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+//	    			
+//	    			items_record_by_username.put(item_name, new_quantity);
+//	    			
+//	    			System.out.println("2nd USERNAME ISERTION ==== " + items_record_by_username.get(item_name));
+//
+//	    		}
+//	    		
+//	    		
+//	    		if(items_record_by_username.get(item_name) > quantity_most_profitable_item_by_username)
+//	    		{
+//	    			quantity_most_profitable_item_by_username = items_record.get(item_name);
+//	    			name_most_profitable_item_by_username = item_name;
+//	    		}
+//	    		
+//	    	}
+//	    	
+//		} 
+//		catch (Exception e) 
+//		{
+//			e.printStackTrace();
+//		}
+//		finally
+//		{
+//			conn_factory.get_factory().close();
+//		}
+//	}
+//    
     
     public int get_quantity_by_item_name(String item_name)
     {

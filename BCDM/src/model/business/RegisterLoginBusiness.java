@@ -220,6 +220,7 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 				}
 				else
 				{
+						
 					new ProductRegistrationView();
 					
 					new IntelligentReportView();

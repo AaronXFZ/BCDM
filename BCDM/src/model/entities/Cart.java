@@ -61,6 +61,12 @@ public class Cart {
 		return items_access_obj.get_online_item_by_id(item_id).get_price();
 	}
 	
+	public ItemsAccess get_ALL_available_items() throws ClassNotFoundException, SQLException
+	{
+		ItemsAccess items_access_obj = new ItemsAccess();
+		
+		return items_access_obj;
+	}
 	public double get_price_by_item_name(String item_name) throws ClassNotFoundException, SQLException
 	{
 		ItemsAccess items_access_obj = new ItemsAccess();
