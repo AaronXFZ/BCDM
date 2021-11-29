@@ -116,8 +116,13 @@ private void buildUI() {
 		
 			ProductRegistration product_registration = new ProductRegistration();
 			
-			product_registration.register_product(product_name, price, is_beverage);
+			boolean item_already_exist = product_registration.register_product(product_name, price, is_beverage);
+			boolean user_agrees_to_change_price;
 			
+			if(item_already_exist)
+			{
+				
+			}
 			new SuccessView();
 			
 		}

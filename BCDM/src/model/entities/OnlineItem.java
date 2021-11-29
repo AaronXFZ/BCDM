@@ -27,6 +27,11 @@ public class OnlineItem {
 		this.price = price;
 	}
 	
+	public int get_id()
+	{
+		return id;
+	}
+	
 	public String get_name()
 	{
 		return name;

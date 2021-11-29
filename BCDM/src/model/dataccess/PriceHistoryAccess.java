@@ -51,4 +51,24 @@ public class PriceHistoryAccess {
 	{
 		this.price_hist_obj = price_hist_obj;
 	}
+	
+	public void add_price_hist_to_db(PriceHistory item_with_changing_price)
+	{
+		
+		try {
+			Session session;
+			
+			session = conn_factory.getSession();
+			session.beginTransaction();
+			
+			session.save(item_with_changing_price);
+			
+			session.getTransaction().commit();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
 }
