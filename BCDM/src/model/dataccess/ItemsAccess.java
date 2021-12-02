@@ -41,7 +41,7 @@ public class ItemsAccess {
 			item_price_map_INTEGER_PRICES.put(item_name, (int)Math.round(item_price));
 		}
 		
-		session.close();
+		//session.close();
 				
 	}
 	
@@ -104,7 +104,7 @@ public class ItemsAccess {
 		
 		session.getTransaction().commit();
 		
-		session.close();
+		//session.close();
 	}
 	
 	

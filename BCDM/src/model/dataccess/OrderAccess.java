@@ -118,7 +118,7 @@ public class OrderAccess {
 		session.createQuery("delete from ItemOrder where order_id='" + order_id + "'")
 		       .executeUpdate();
 		
-		session.close();
+		//session.close();
 	}
 	
 	//To use this function, it has to call the get all orders from the table which is the get all orders function within this class
@@ -131,7 +131,7 @@ public class OrderAccess {
 		session.createQuery("delete from ItemOrder where id='" + id + "'")
 		       .executeUpdate();
 		
-		session.close();
+		//session.close();
 		
 	}
 

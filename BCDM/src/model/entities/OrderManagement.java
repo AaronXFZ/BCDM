@@ -62,7 +62,7 @@ public class OrderManagement {
 			
 			session.getTransaction().commit();
 			
-			session.close();
+			//session.close();
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
