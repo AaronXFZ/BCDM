@@ -5,6 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +20,7 @@ import javax.swing.JTextField;
 
 import model.business.RegisterLoginBusiness;
 import model.entities.Intelligent_Report;
+import model.entities.Receipt;
 import view.RevenueReportView;
 
 @SuppressWarnings("serial")
@@ -22,11 +28,11 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 
 	
 	
-	private JButton buttonSubmit, buttonClear, buttonRegister;
+	private JButton buttonSubmit, buttonClear;
 
-	private JLabel lblUserName;
+	private JLabel lblUserName, lblStartingDay, lblFinalDay;
 
-	private JTextField txtUserName;
+	private JTextField txtUserName, txtStartingDay, txtFinalDay;
 
 	private JPanel panel1, panel2, panel3;
 	
@@ -40,7 +46,9 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 	private void initializeComponents() {
 		
 		this.lblUserName = new JLabel("Username:   ");
-
+		this.lblStartingDay =  new JLabel("Starting Day:   ");
+		this.lblFinalDay = new     JLabel("Final Day:      ");
+		
 		this.buttonSubmit = new JButton("Submit");
 		this.buttonSubmit.addActionListener(this);
 
@@ -49,6 +57,8 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 		
 
 		this.txtUserName = new JTextField(23);
+		this.txtStartingDay = new JTextField(4);
+		this.txtFinalDay = new JTextField(4);
 
 		this.panel1 = new JPanel();
 		this.panel1.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -65,6 +75,12 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 
 		this.panel1.add(this.lblUserName);
 		this.panel1.add(this.txtUserName);
+		
+		this.panel1.add(this.lblStartingDay);
+		this.panel1.add(this.txtStartingDay);
+		
+		this.panel1.add(this.lblFinalDay);
+		this.panel1.add(this.txtFinalDay);
 
 		this.panel3.add(this.buttonSubmit);
 		this.panel3.add(this.buttonClear);
@@ -96,9 +112,19 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 			}
 			
 			String userName = txtUserName.getText();
-
-			if(userName.equals(""))
+			String str_start_date = this.txtStartingDay.getText();
+			String str_final_date = this.txtFinalDay.getText();
+			
+			
+			if(!userName.equals("") && (!str_start_date.equals("") && !str_final_date.equals("")))
+			{
+				//Enters in username but no date
+			}
+			else if(userName.equals("") && (!str_start_date.equals("") && !str_final_date.equals("")))
 			{	
+				//EVERY FIELD BLANK
+				//Unfiltered
+				
 				//populates hashmap with items sold (not filtered)
 				try {
 					Intelligent_Report intel_report_obj = new Intelligent_Report();
@@ -125,9 +151,26 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 				
 				
 			}
+			else if(!str_start_date.equals("") && str_final_date.equals(""))
+			{
+				//prompt user that they must fill in both dates
+				JOptionPane.showMessageDialog(panel1, "You MUST fill in the Starting Date and Final Date");
+			}
+			else if(str_start_date.equals("") && !str_final_date.equals(""))
+			{
+				//prompts user that they must fill in both dates
+				JOptionPane.showMessageDialog(panel1, "You MUST fill in the Starting Date and Final Date");
+			}
+			
+			
+			else if(!userName.equals("") && (!str_start_date.equals("") && !str_final_date.equals("")))
+			{
+				//Enters just the date
+			}
 			else
 			{
-
+				//All fields entered
+				
 				//populates hashmap with items sold (filtered by userName)
 				try {
 					Intelligent_Report intel_report_obj = new Intelligent_Report();
@@ -152,7 +195,7 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 				
 			}
 			
-		} 
+		}
 		else 
 		{
 			this.txtUserName.setText("");
@@ -160,5 +203,29 @@ public class IntelligentReportView extends JFrame implements ActionListener {
 		}
 
  }
+	
+//	@SuppressWarnings("deprecation")
+//	public List<Receipt> get_range_receipts_by_months(String start_date, String end_date) throws ParseException
+//	{
+//		this.range_date_receipts.clear();
+//		
+//		for(int i = 0; i <= receipts.size(); i++)
+//		{
+//			Date receipt_date = new SimpleDateFormat("dd/MM/yyyy").parse(receipts.get(i).get_date());  
+//			Date date_lowerbnd = new SimpleDateFormat("dd/MM/yyyy").parse(start_date);  
+//			Date date_upperbnd = new SimpleDateFormat("dd/MM/yyyy").parse(end_date);  
+//			
+//			int receipt_month = receipt_date.getMonth();
+//			int lowerbnd_month = date_lowerbnd.getMonth();
+//			int upperbnd_month = date_upperbnd.getMonth();
+//			
+//			if(receipt_month >= lowerbnd_month && receipt_month <= upperbnd_month)
+//			{
+//				range_date_receipts.add(receipts.get(i));
+//			}
+//		}
+//		
+//		return range_date_receipts;
+//	}
 }
 	

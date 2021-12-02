@@ -25,6 +25,8 @@ public class RevenueReportView extends JFrame {
 	private String most_popular_item;
 	private double total_revenue;
 	
+	private Integer daysAgo;
+	
 	private HashMap<String, Integer> items_quantity;
 	
 	private JLabel lblUserName, lbl_most_pop_item, lbl_total_revenue;

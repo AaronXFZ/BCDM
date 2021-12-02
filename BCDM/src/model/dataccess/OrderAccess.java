@@ -37,9 +37,29 @@ public class OrderAccess {
 	
 	private List<ItemOrder> ordered_items = new ArrayList();
 	
+	private List<ItemOrder> ordered = new ArrayList();
+	
 	public OrderAccess(String username)
 	{
 		this.username = username;
+	}
+	
+	public List<ItemOrder> get_ALL_order_items_orders()
+	{
+		Session session;
+		try {
+			session = conn_factory.getSession();
+			session.beginTransaction();
+			
+			List<ItemOrder>all_ordered_items = session.createQuery("from ItemOrder").getResultList();
+			
+			return all_ordered_items;
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	
@@ -77,16 +97,6 @@ public class OrderAccess {
 		
 		
 		Receipt receipt_obj = new Receipt(ordered_items);
-		
-		//open Receipt Screen to point receipt info with receipt_obj here
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		

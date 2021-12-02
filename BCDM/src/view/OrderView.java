@@ -142,7 +142,8 @@ public class OrderView {
 		orderPanel.add(createSelectedItemsListPanel());
 		
 		orderPanel.add(new JLabel("Total Price: "));
-		priceLable = new JLabel(toPriceString(currentPrice));
+
+		priceLable = new JLabel(toPriceString(currentPrice*100));
 
 		orderPanel.add(priceLable);
 		professorDiscount = new JCheckBox("Professor Discounts (10% off)", false);
@@ -239,10 +240,10 @@ public class OrderView {
 				removeSelectedMenuItemLabel(itemName);
 				currentPrice-=menuItemNameToPrice.get(itemName);
 				if (!professorDiscount.isSelected()) {
-					priceLable.setText(toPriceString(currentPrice));
+					priceLable.setText(toPriceString(currentPrice*100));
 				}
 				else {
-					priceLable.setText(toPriceString((int)(currentPrice*0.9)));
+					priceLable.setText(toPriceString((int)(currentPrice*90)));
 				}
 			}
 			else {
@@ -251,10 +252,10 @@ public class OrderView {
 				addSelectedMenuItemButton(itemName);
 				currentPrice+=menuItemNameToPrice.get(itemName);
 				if (!professorDiscount.isSelected()) {
-					priceLable.setText(toPriceString(currentPrice));
+					priceLable.setText(toPriceString(currentPrice*100));
 				}
 				else {
-					priceLable.setText(toPriceString((int)(currentPrice*0.9)));
+					priceLable.setText(toPriceString((int)(currentPrice*90)));
 				}
 				//select the item
 			}
@@ -290,7 +291,7 @@ public class OrderView {
 	}
 	
 	private void addSelectedMenuItemButton(String menuItemName) {
-		JLabel toAdd = new JLabel("<html><center>" + menuItemName+ "..."+toPriceString(menuItemNameToPrice.getOrDefault(menuItemName, 0))+ "</center></html>");
+		JLabel toAdd = new JLabel("<html><center>" + menuItemName+ "..."+toPriceString(menuItemNameToPrice.getOrDefault(menuItemName, 0)*100)+ "</center></html>");
         Dimension toAddLabelSize = new Dimension(200,40);
         toAdd.setMaximumSize(toAddLabelSize);
         toAdd.setMinimumSize(toAddLabelSize);
@@ -380,7 +381,7 @@ public class OrderView {
 	
 	private static String toPriceString(int priceCents) {
         StringBuilder sb = new StringBuilder();
-        priceCents = priceCents*100;
+        priceCents = priceCents;
         sb.append("$ ");
         sb.append(priceCents/100);
         sb.append(".");
@@ -394,34 +395,35 @@ public class OrderView {
     }
 	
 	private String generateReceiptString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Receipt: \n\n");
-		for(String selectedItem: selectedMenuItems) {
-			sb.append(selectedItem);
-			sb.append(" - ");
-			if (!professorDiscount.isSelected()) {
-				sb.append(toPriceString(menuItemNameToPrice.getOrDefault(selectedItem, 0)));
-			}
-			else {
-				sb.append(toPriceString((int)((menuItemNameToPrice.getOrDefault(selectedItem, 0))*0.9)));
-			}
-			
-			sb.append("\n");
-		}
-		if (professorDiscount.isSelected()) {
-			sb.append("\nEmployee got 10% discount.\n");
-		}
-		
-		sb.append("\n");
-		sb.append("Total: \n");
-		if (!professorDiscount.isSelected()) {
-			sb.append(toPriceString(currentPrice));
-		}
-		else {
-			sb.append(toPriceString((int)(currentPrice*0.9)));
-		}
-		return sb.toString();
-	}
+        StringBuilder sb = new StringBuilder();
+        sb.append("Receipt: \n\n");
+        for(String selectedItem: selectedMenuItems) {
+            sb.append(selectedItem);
+            sb.append(" - ");
+            if (!professorDiscount.isSelected()) {
+                sb.append(toPriceString(menuItemNameToPrice.getOrDefault(selectedItem, 0)*100));
+            }
+            else {
+                sb.append(toPriceString((int)((menuItemNameToPrice.getOrDefault(selectedItem, 0))*90)));
+            }
+
+            sb.append("\n");
+        }
+        if (professorDiscount.isSelected()) {
+            sb.append("\nEmployee got 10% discount.\n");
+        }
+
+        sb.append("\n");
+        sb.append("Total: \n");
+        if (!professorDiscount.isSelected()) {
+            sb.append(toPriceString(currentPrice*100));
+        }
+        else {
+            sb.append(toPriceString((int)(currentPrice*90)));
+        }
+        return sb.toString();
+    }
+	
 	//This part is to generate the history, you can modify the for loop to get the desired data from db.
 	private String generateHistoryInformation() {
 		StringBuilder sb = new StringBuilder();

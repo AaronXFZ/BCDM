@@ -225,7 +225,7 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 					
 					new IntelligentReportView();	//Showing intelligent report
 					
-					OrderView order_view_obj = new OrderView();	//Showing the main ordering screen
+					//OrderView order_view_obj = new OrderView();	//Showing the main ordering screen
 					
 					
 //					AccountAccess account_access_obj = new AccountAccess(userName);

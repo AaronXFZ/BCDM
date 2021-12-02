@@ -1,0 +1,120 @@
+.main-navbar{
+    background-color:rgb(19, 27, 31);
+
+}
+
+.mini-navbar{
+    /* background-color:rgb(19, 27, 31); */
+    padding-right: 20px;
+    margin-top: 10px;
+    /* margin: 0; */
+}
+
+.newname {
+    /* width: 41.6666666667%; */
+    margin-left: -10px;
+    color: black;
+    /* left: auto;
+    right: auto; */
+}
+
+.main-box{
+    min-height: 400px;
+    /* border: 1px solid black; */
+}
+
+.left-box{
+    /* border: 1px solid red; */
+    height: 400px;
+}
+
+
+.right-box{
+    /* border: 1px solid green; */
+
+}
+
+.mini-navbar{
+    background-color:rgb(216, 212, 221);
+
+}
+.actions{
+    /* border: 1px solid blue; */
+}
+/* .row {
+    margin-left: -20px ;
+} */
+
+/* 
+nav .nav-wrapper{
+    margin-left: 30px;
+} */
+
+a, li {
+    color: black;
+}
+
+.food-items {
+    /* border: 1px solid black; */
+    /* max-width: 102px;
+    max-height: 185px; */
+    /* max-height: 200px; */
+    
+}
+
+.food-item {
+    margin-top: 6px;
+   height: 105px;
+   width: 220px;
+}
+
+.items-table{
+ /* min-height: 300px; */
+ /* border: 1px solid black; */
+}
+
+/* .check {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+} */
+
+
+.action-button{
+    width: 67px;
+    height: 40px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 20 px;
+    margin-right: 10px;
+    margin-top: 15px;
+    /* margin-right: 20px; */
+}
+
+.bottom-column{
+    /* border: 1px solid yellow; */
+    background-color: rgb(216, 212, 223);
+}
+
+.bottom-buttons{
+    width: 160px;
+    height: 50px;
+}
+
+.custom-color{
+ background-color: rgb(61, 149, 221);
+ color: white;
+}
+
+
+.cc2{
+ background-color: rgb(16, 90, 150);
+ color: white;
+}
+
+.cc3{
+    background-color: rgb(136, 193, 240);
+    color: rgb(2, 2, 2);
+}   
+
