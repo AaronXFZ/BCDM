@@ -41,6 +41,9 @@ public class User {
     
     @Column(name="is_professor")
     private boolean is_professor;
+    
+    @Column(name="discount_rate")
+    private Double discount_rate;
         
     @Transient
     private int num_year_of_membership;
@@ -66,13 +69,14 @@ public class User {
     }
 
     //Overload setAttributes for registering
-    public void setAttributes(String userName, String password, String first_name, String last_name, boolean is_professor)
+    public void setAttributes(String userName, String password, String first_name, String last_name, boolean is_professor, Double discount_rate)
     {
         this.userName = userName;
         this.password = password;
         this.first_name = first_name;
         this.last_name = last_name;
         this.is_professor = is_professor;
+        this.discount_rate = discount_rate;
         
         set_start_member_date();
     }
@@ -99,6 +103,11 @@ public class User {
     {
     	this.is_professor = is_professor;
     }
+    
+    public void set_discount_rate(Double discount_rate)
+    {
+    	this.discount_rate = discount_rate;
+    }
 
     public String getPassword() {
         return password;
@@ -114,52 +123,13 @@ public class User {
     }
     
     public double get_discount_rate()
-    {
-    	double discount_rate = 0.0;
-    	
-    	if(is_professor)
-    	{
-    	    if(num_year_of_membership <= 1 )
-    	        discount_rate = 0.04; // 4% off
-    	    else if (num_year_of_membership >= 2 && num_year_of_membership < 3)
-    	    {
-    	        discount_rate = 0.08; // 8% off
-    	    }
-    	    else if (num_year_of_membership >= 3 && num_year_of_membership < 4)
-    	    {
-    	        discount_rate = 0.10; // 10% off
-    	    }
-    	    else
-    	    {
-    	        discount_rate = 0.84; // 84% off
-    	    }
-    	}
-    	else
-    	{
-    	    if(num_year_of_membership <= 1 )
-    	        discount_rate = 0.03; // 3% off
-    	    else if (num_year_of_membership >= 2 && num_year_of_membership < 3)
-    	    {
-    	        discount_rate = 0.05; // 45% off
-    	    }
-    	    else if (num_year_of_membership >= 3 && num_year_of_membership < 4)
-    	    {
-    	        discount_rate = 0.8; // 8% off
-    	    }
-    	    else
-    	    {
-    	        discount_rate = 0.12; // 12% off
-    	    }
-    	}
-    	
+    {    	   	
     	return discount_rate;
     }
     
     public double get_discounted_price(double price)
-    {
- 
-    	
-    	return price - (get_discount_rate()*price);
+    {   	
+    	return price - (discount_rate*price);
     }
     
     public void set_start_member_date()

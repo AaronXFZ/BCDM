@@ -119,7 +119,7 @@ public class RevenueReportView extends JFrame {
 	            
 	            individual_row = (item_name + "      " + quantity + "        " + item_price);
 	            this.panel1.add(new JLabel(individual_row));
-	            System.out.println(item_name_key + " ****************** individual_row ====== " +  individual_row);
+	           
 	            
 	            //this.panel2.add(new JLabel(individual_row));
 

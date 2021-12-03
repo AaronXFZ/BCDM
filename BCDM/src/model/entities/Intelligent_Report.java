@@ -148,27 +148,7 @@ public class Intelligent_Report {
 		}
     }
     
-//    //u -> username
-//    //s -> startDate
-//    //f -> finalDate
-//    public void calculateDate(String username, String startDate, String finalDate) throws ClassNotFoundException, SQLException
-//    {
-//    	items_record_by_username.clear();
-//    	
-//    	Session session = conn_factory.getSession();
-//    	session.beginTransaction();
-//    	
-//    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
-//    	
-//    	final String u = username;
-//    	final String s = startDate;
-//    	final String f = finalDate;
-//
-//    	
-//    }
-    
-    
-    //
+
     public void record_ordered_items_onto_map_by_username(String userName, Integer min_day, Integer max_day) throws ClassNotFoundException, SQLException
     {
     	Session session = conn_factory.getSession();

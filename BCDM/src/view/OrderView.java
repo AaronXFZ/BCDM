@@ -1,11 +1,14 @@
 package view;
 
-import model.dataccess.ItemsAccess; // Obtains the menu from the DB
+import view.DiscountDatabaseModifierView; //updates user's discount rate on database
+
 import model.entities.Cart;	// Use to add carted items onto list to then be pushed to DB
 import model.entities.OnlineItem;
 import model.entities.PriceHistory;
+import model.dataccess.ItemsAccess;
 import model.entities.SubmitOrder;
 import model.entities.User; // Associates order with the User for the DB 
+import model.entities.UserAccountRetrieval;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,6 +48,8 @@ public class OrderView {
 	
 	Cart cart_obj = new Cart(user);
 	
+	private Double user_discount_rate;
+	
 	private List<String> items_ordered = new ArrayList(); //Stores the current items in cart
 	
 	List<OnlineItem> local_full_menu = new ArrayList();
@@ -55,9 +60,11 @@ public class OrderView {
 	private JPanel currentMenuItemsPanel;
 	private JPanel selectedItemsListPanel;
 	private JLabel priceLable;
-	private JCheckBox professorDiscount;
+
+	//private JCheckBox professorDiscount;
 	private ActionListener menuItemActionListener;
 
+	
 	private int currentPrice;
 	private HashMap<String, JButton> selectionTabMap;
 	private HashMap<String, JLabel> selectedMenuItemLabels;
@@ -66,6 +73,18 @@ public class OrderView {
 	public Color bronco = new Color(40,134,65);
 	
 	public OrderView() {
+		System.out.println("\n\tUSERNAME = " + this.user.getUserName());
+		//Set the discount rate
+		UserAccountRetrieval user_db = new UserAccountRetrieval(this.user.getUserName()); //entity for retrieving user account in model.entity
+		this.user = user_db.get_user(this.user.getUserName());
+		this.user_discount_rate = 1.0-user_db.get_discount_from_db();
+		this.user.set_discount_rate(this.user_discount_rate);
+		
+		System.out.println("\n\tuser_db.get_discount(); = "  + user_db.get_discount());
+		System.out.println("\n\tthis.user_discount_rate = "  + this.user_discount_rate);
+		
+		System.out.println("\n\tthis.user.get_discount_rate() = "  + this.user.get_discount_rate());
+		
 		store_food_menu_locally();	//pulls food menu from the DB
 		
 		initializeDefaultSetting();
@@ -133,7 +152,20 @@ public class OrderView {
 	}
 	
 	private JPanel createOrderPanel() {
-		String orderName = "Order     Someone";
+		String orderName = "Order     ";
+		
+		if(user.get_is_professor())
+		{
+			orderName += "Professor ";
+		}
+		else
+		{
+			orderName += "Student ";
+		}
+		
+		orderName += user.get_last_name() + 
+				" (" + Math.round((1.0-this.user_discount_rate) *100)+ "% off)";
+		
 		JPanel orderPanel = new JPanel();
 		
 		orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.PAGE_AXIS));
@@ -146,9 +178,9 @@ public class OrderView {
 		priceLable = new JLabel(toPriceString(currentPrice*100));
 
 		orderPanel.add(priceLable);
-		professorDiscount = new JCheckBox("Professor Discounts (10% off)", false);
-		professorDiscount.addActionListener(menuItemActionListener);
-		orderPanel.add(professorDiscount);
+		//professorDiscount = new JCheckBox("Professor Discounts (10% off)", false);
+		//professorDiscount.addActionListener(menuItemActionListener);
+		//orderPanel.add(professorDiscount);
 		JButton submitButton = new JButton("Submit Order");
 		
 		submitButton.addActionListener(ae -> {
@@ -162,13 +194,33 @@ public class OrderView {
 		printReceipt.addActionListener(ae -> {
 			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
 		});
-		JButton printHistory = new JButton("Print History");
+		JButton printHistory = new JButton("Print Price History");
 		printHistory.addActionListener(ae -> {
 			JOptionPane.showMessageDialog(orderPanel, generateHistoryInformation());
 		});
+		
+		JButton btn_view_intel_report = new JButton("Show Intelligent Revenue Report");
+		btn_view_intel_report.addActionListener(ae -> {
+			employeeProtectedServices("intel_revenue_report_view");
+		});
+		
+		JButton btn_view_register_product = new JButton("Register Product");
+		btn_view_register_product.addActionListener(ae -> {
+			employeeProtectedServices("register_product_view");
+		});
+		
+		JButton btn_view_update_discount = new JButton("Update Discount");
+		btn_view_update_discount.addActionListener(ae ->{
+			employeeProtectedServices("update_discount_view");
+		});
+		
 		orderPanel.add(submitButton);
 		orderPanel.add(printReceipt);
 		orderPanel.add(printHistory);
+		orderPanel.add(btn_view_intel_report);
+		orderPanel.add(btn_view_register_product);
+		orderPanel.add(btn_view_update_discount);
+		
 		orderPanel.setBorder(BorderFactory.createLineBorder(bronco, 3));
 		return orderPanel;
 	}
@@ -239,11 +291,14 @@ public class OrderView {
 				menuItemButton.setBorder(UIManager.getBorder("Button.border"));
 				removeSelectedMenuItemLabel(itemName);
 				currentPrice-=menuItemNameToPrice.get(itemName);
-				if (!professorDiscount.isSelected()) {
-					priceLable.setText(toPriceString(currentPrice*100));
+				//if (!professorDiscount.isSelected()) {
+				if (!user.get_is_professor()) {
+					//priceLable.setText(toPriceString(currentPrice*100));
+					priceLable.setText(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
 				}
 				else {
-					priceLable.setText(toPriceString((int)(currentPrice*90)));
+					//priceLable.setText(toPriceString((int)(currentPrice*90)));
+					priceLable.setText(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
 				}
 			}
 			else {
@@ -251,11 +306,13 @@ public class OrderView {
 				menuItemButton.setBorder(BorderFactory.createLineBorder(bronco,4));
 				addSelectedMenuItemButton(itemName);
 				currentPrice+=menuItemNameToPrice.get(itemName);
-				if (!professorDiscount.isSelected()) {
-					priceLable.setText(toPriceString(currentPrice*100));
+				//if (!professorDiscount.isSelected()) {
+				if(!user.get_is_professor()) {
+					//priceLable.setText(toPriceString(currentPrice*100));
+					priceLable.setText(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
 				}
 				else {
-					priceLable.setText(toPriceString((int)(currentPrice*90)));
+					priceLable.setText(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
 				}
 				//select the item
 			}
@@ -400,7 +457,8 @@ public class OrderView {
         for(String selectedItem: selectedMenuItems) {
             sb.append(selectedItem);
             sb.append(" - ");
-            if (!professorDiscount.isSelected()) {
+            //if (!professorDiscount.isSelected()) {
+            if(!user.get_is_professor()) {
                 sb.append(toPriceString(menuItemNameToPrice.getOrDefault(selectedItem, 0)*100));
             }
             else {
@@ -409,17 +467,28 @@ public class OrderView {
 
             sb.append("\n");
         }
-        if (professorDiscount.isSelected()) {
-            sb.append("\nEmployee got 10% discount.\n");
+        //if (professorDiscount.isSelected()) {
+        
+        System.out.println("ABCDEF - " + user.get_is_professor());
+        System.out.println("ABCDEF - user_discount_rate = " + this.user_discount_rate);
+        if(user.get_is_professor()) {
+            sb.append("\nThis Professor account got "+this.user_discount_rate*100+" % discount.\n");
+        }
+        else
+        {
+        	sb.append("\nThis Student account got "+this.user_discount_rate*100+" % discount.\n");
         }
 
         sb.append("\n");
         sb.append("Total: \n");
-        if (!professorDiscount.isSelected()) {
-            sb.append(toPriceString(currentPrice*100));
+        //if (!professorDiscount.isSelected()) {
+        if (!user.get_is_professor()) {
+            //sb.append(toPriceString(currentPrice*98));
+        	sb.append(toPriceString(currentPrice*(int)(this.user_discount_rate*100)));
         }
         else {
-            sb.append(toPriceString((int)(currentPrice*90)));
+            //sb.append(toPriceString((int)(currentPrice*90)));
+        	sb.append(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
         }
         return sb.toString();
     }
@@ -451,6 +520,24 @@ public class OrderView {
 		
 
 		return sb.toString();
+	}
+	
+	void employeeProtectedServices(final String feature_name)
+	{
+		JOptionPane.showMessageDialog(null, "Normally this window would prompt for an employee's password, but for demoing purposes just hit the button below.");
+		
+		if(feature_name.equals("intel_revenue_report_view"))
+		{
+			new IntelligentReportView();
+		}
+		else if(feature_name.equals("register_product_view"))
+		{
+			new ProductRegistrationView();
+		}
+		else if(feature_name.equals("update_discount_view"))
+		{
+			new DiscountDatabaseModifierView(this.user.getUserName());
+		}
 	}
 	
 	void submit_order()

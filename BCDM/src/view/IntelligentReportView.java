@@ -229,7 +229,6 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 			if( (!str_start_day.equals("") || !str_final_day.equals("") ) && 
 				  (int_starting_day < 0 || int_final_day < 0) )
 			{
-				System.out.println("\nXXXXXXXXX = " + str_start_day != "" + " final is empty = " + !str_final_day.isEmpty());
 				JOptionPane.showMessageDialog(panel1, "The Starting Day and The Final Day fields must BOTH be numeric values or BOTH left blank.");
 			}
 			else

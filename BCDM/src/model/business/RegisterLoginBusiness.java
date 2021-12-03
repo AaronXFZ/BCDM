@@ -221,11 +221,11 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 				else
 				{
 						
-					new ProductRegistrationView(); //showing product registration view
+					//new ProductRegistrationView(); //showing product registration view
 					
-					new IntelligentReportView();	//Showing intelligent report
+					//new IntelligentReportView();	//Showing intelligent report
 					
-					//OrderView order_view_obj = new OrderView();	//Showing the main ordering screen
+					new OrderView();	//Showing the main ordering screen
 					
 					
 //					AccountAccess account_access_obj = new AccountAccess(userName);

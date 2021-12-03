@@ -2,15 +2,11 @@ package model.dataccess;
 
 import org.hibernate.Session;
 
-import model.dataccess.ConnectionFactory_Hibernate;
+import model.entities.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
-import model.entities.User;
-//import model.dataccess.ConnectionFactory;
 
 public class UserRegistrationAccess {
 	
@@ -29,8 +25,19 @@ public class UserRegistrationAccess {
 	public boolean registration_user(String userName, String password, String first_name, String last_name, boolean is_professor) throws ClassNotFoundException, SQLException
 	{
 		User temp_user = User.getSingletonObject();
-				
-		temp_user.setAttributes(userName, password, first_name, last_name, is_professor);
+		
+		Double initial_discount_rate = 0.0;
+		
+		if(is_professor)
+		{
+			initial_discount_rate = .90;	
+		}
+		else //setting initial discount for user. Later this discount can be changed by an employee user from this Java side
+		{
+			initial_discount_rate = .60;	
+		}
+		
+		temp_user.setAttributes(userName, password, first_name, last_name, is_professor, initial_discount_rate);
 		
 		Session session = conn_factory_hib.getSession();
 		
