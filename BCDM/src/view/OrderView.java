@@ -5,7 +5,6 @@ import view.DiscountDatabaseModifierView; //updates user's discount rate on data
 import model.entities.Cart;	// Use to add carted items onto list to then be pushed to DB
 import model.entities.OnlineItem;
 import model.entities.PriceHistory;
-import model.dataccess.ItemsAccess;
 import model.entities.SubmitOrder;
 import model.entities.User; // Associates order with the User for the DB 
 import model.entities.UserAccountRetrieval;

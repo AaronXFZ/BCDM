@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -103,7 +104,18 @@ public class DiscountDatabaseModifierView extends JFrame implements ActionListen
 				if(this.in_discount >= 0.000 && this.in_discount <= 1.000)
 				{
 					this.acc_access_obj.update_discount(in_discount);
+					
+					JOptionPane.showMessageDialog(panel1, "The DISCOUNT for this account has been updated."
+							+ " Re-open the app to see changes.");
 				}
+				else
+				{
+					JOptionPane.showMessageDialog(panel1, "The inputted value must be [0, 1]");
+				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(panel1, "The inputted value must be decimal value.");
 			}
 
 			
