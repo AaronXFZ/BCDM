@@ -3,10 +3,13 @@ package model.entities;
 import model.dataccess.ConnectionFactory_Hibernate;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.hibernate.Session;
 
@@ -60,7 +63,7 @@ public class Intelligent_Report {
     	this.username = username;
     }
     
-    public void record_ordered_items_onto_map() throws ClassNotFoundException, SQLException
+    public void record_ordered_items_onto_map(Integer min_day, Integer max_day) throws ClassNotFoundException, SQLException
     {
     	try
 		{
@@ -74,19 +77,56 @@ public class Intelligent_Report {
 	    	for(int i = 0; i < orders.size(); i++)
 	    	{
 	    		String item_name = orders.get(i).get_item_name();
+	    		//if a day entry is negative, that means that the user does not want to filter search by period
+    			if(min_day >= 0 && max_day >= 0)
+    			{
+    			
+	    			String str_order_date = orders.get(i).get_date();
+	    			
+	    			DateFormat date_formatter = new SimpleDateFormat("dd-MM-yyyy");
+	    			
+	    			Date order_date = date_formatter.parse(str_order_date);
+	    			
+		    		//Get how long ago an order is in units of days
+		    		Date current_date = new Date();
+		  		    			
+		    		long difference_in_millies = Math.abs(order_date.getTime() - current_date.getTime());
+		
+		    		long difference_in_days = Math.floorDiv(difference_in_millies, 86400000);	//converting milliseconds to days
+		    				    		
+		    		if(difference_in_days >= min_day  && difference_in_days <= max_day)
+		    		{
 	    		
-	    		if (items_record.get(item_name) == null)
-	    		{
-	    			Integer first = 1;
-	    			items_record.put(item_name, first);
-	    		}
+			    		if (items_record.get(item_name) == null)
+			    		{
+			    			Integer first = 1;
+			    			items_record.put(item_name, first);
+			    		}
+			    		else
+			    		{
+			    			int new_quantity = items_record.get(item_name) + 1;
+			    			
+			    			items_record.put(item_name, new_quantity);
+			    			
+			    		}
+		    		}
+    			}
 	    		else
 	    		{
-	    			int new_quantity = items_record.get(item_name) + 1;
-	    			
-	    			items_record.put(item_name, new_quantity);
-	    			
+	    			if (items_record.get(item_name) == null)
+		    		{
+		    			Integer first = 1;
+		    			items_record.put(item_name, first);
+		    		}
+		    		else
+		    		{
+		    			int new_quantity = items_record.get(item_name) + 1;
+		    			
+		    			items_record.put(item_name, new_quantity);
+		    			
+		    		}
 	    		}
+		    	
 	    		
 	    		if(items_record.get(item_name) > quantity_most_profitable_item_all)
 	    		{
@@ -104,7 +144,7 @@ public class Intelligent_Report {
 		}
 		finally
 		{
-			conn_factory.get_factory().close();
+			//conn_factory.get_factory().close();
 		}
     }
     
@@ -129,14 +169,13 @@ public class Intelligent_Report {
     
     
     //
-    public void record_ordered_items_onto_map_by_username(String userName) throws ClassNotFoundException, SQLException
+    public void record_ordered_items_onto_map_by_username(String userName, Integer min_day, Integer max_day) throws ClassNotFoundException, SQLException
     {
-    	System.out.println("userNameuserNameuserNameuserName userName = " + userName );
+    	Session session = conn_factory.getSession();
     	try
 		{
     		items_record_by_username.clear();
-	    	
-	    	Session session = conn_factory.getSession();
+
 	    	session.beginTransaction();
 	    	
 	    	List<ItemOrder> orders = session.createQuery("from ItemOrder").getResultList();
@@ -144,28 +183,58 @@ public class Intelligent_Report {
 	    	for(int i = 0; i < orders.size(); i++)
 	    	{
 	    		
-	    		System.out.println(orders.get(i).get_username() + " ====== " + userName + " ^^^ " +
-	    				orders.get(i).get_username().equals(userName));
-	    		
-	    		
 	    		if(orders.get(i).get_username().equals(userName))
 	    		{
-		    		String item_name = orders.get(i).get_item_name();
-		    		
-		    		System.out.println(item_name + " --- = " + orders.get(i).get_item_name() );
-		    		
-		    		if (items_record_by_username.get(item_name) == null)
-		    		{
-		    			Integer first = 1;
-		    			items_record_by_username.put(item_name, first);
-		    		}
-		    		else
-		    		{
-		    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+	    			String item_name = orders.get(i).get_item_name();
+	    			
+	    			//if a day entry is negative, that means that the user does not want to filter search by period
+	    			if(min_day >= 0 && max_day >= 0)
+	    			{
+	    			
+		    			String str_order_date = orders.get(i).get_date();
 		    			
-		    			items_record_by_username.put(item_name, new_quantity);
+		    			DateFormat date_formatter = new SimpleDateFormat("dd-MM-yyyy");
 		    			
-		    		}
+		    			Date order_date = date_formatter.parse(str_order_date);
+		    			
+			    		//Get how long ago an order is in units of days
+			    		Date current_date = new Date();
+			  		    			
+			    		long difference_in_millies = Math.abs(order_date.getTime() - current_date.getTime());
+			
+			    		long difference_in_days = Math.floorDiv(difference_in_millies, 86400000);	//converting milliseconds to days
+			    				    		
+			    		if(difference_in_days >= min_day  && difference_in_days <= max_day)
+			    		{
+				    		if (items_record_by_username.get(item_name) == null)
+				    		{
+				    			Integer first = 1;
+				    			items_record_by_username.put(item_name, first);
+				    		}
+				    		else
+				    		{
+				    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+				    			items_record_by_username.put(item_name, new_quantity);
+				    			
+				    		}
+			    		}
+	    			}
+	    			else
+	    			{
+
+			    		if (items_record_by_username.get(item_name) == null)
+			    		{
+			    			Integer first = 1;
+			    			items_record_by_username.put(item_name, first);
+			    		}
+			    		else
+			    		{
+			    			Integer new_quantity = items_record_by_username.get(item_name) + 1;
+			    			
+			    			items_record_by_username.put(item_name, new_quantity);
+			    			
+			    		}
+	    			}
 		    		
 		    		if(items_record_by_username.get(item_name) > quantity_most_profitable_item_by_username)
 		    		{

@@ -48,8 +48,8 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 	private void initializeComponents() {
 		
 		this.lblUserName = new JLabel("Username:   ");
-		this.lblStartingDay =  new JLabel("Starting Day:   ");
-		this.lblFinalDay = new     JLabel("Final Day:      ");
+		this.lblStartingDay =  new JLabel("Minimum Days Ago (number):   ");
+		this.lblFinalDay = new     JLabel("Maximum Days Ago (number):      ");
 		
 		this.buttonSubmit = new JButton("Submit");
 		this.buttonSubmit.addActionListener(this);
@@ -102,8 +102,18 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 		this.setVisible(true);
 	}
 
+	
 	public void run_unfiltered_report() 
 	{
+		Integer int_starting_day = -1;
+		Integer int_final_day = -1;
+		
+		if(isNumeric(this.txtStartingDay.getText()) && isNumeric(this.txtFinalDay.getText()))
+		{
+			int_starting_day = Integer.parseInt(this.txtStartingDay.getText());
+			int_final_day = Integer.parseInt(this.txtFinalDay.getText());		
+		}
+		
 		//EVERY FIELD BLANK
 		//Unfiltered
 		
@@ -111,7 +121,7 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 		try {
 			Intelligent_Report intel_report_obj = new Intelligent_Report();
 			
-			intel_report_obj.record_ordered_items_onto_map();
+			intel_report_obj.record_ordered_items_onto_map(int_starting_day, int_final_day);
 			intel_report_obj.get_all_items_ordered(); // hash map of entire list
 			
 			new RevenueReportView(
@@ -131,13 +141,13 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 		//intel_report_obj.get_total_revenue_all();  --> gives the total_revenue from the hashmap above
 	}
 	
-	public void run_filtered_report(String userName, String startingDay, String finalDay)
+	public void run_filtered_report(String userName, Integer int_starting_day, Integer int_final_day)
 	{
 		//populates hashmap with items sold (filtered by userName)
 		try {
 			Intelligent_Report intel_report_obj = new Intelligent_Report();
-			
-			intel_report_obj.record_ordered_items_onto_map_by_username(userName);
+					
+			intel_report_obj.record_ordered_items_onto_map_by_username(userName, int_starting_day, int_final_day);
 			
 			
 			new RevenueReportView(
@@ -151,10 +161,35 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+	}
+	
+	private static boolean isNumeric(String str)
+	{
+		try
+		{
+			Integer.parseInt(str);
+			return true;
+		}
+		catch(NumberFormatException e)
+		{
+			return false;
+		}
 	}
 	
 	public void actionPerformed(ActionEvent event) {
-	
+		String userName = txtUserName.getText();
+		String str_start_day = this.txtStartingDay.getText();
+		String str_final_day = this.txtFinalDay.getText();
+		
+		Integer int_starting_day = -1;
+		Integer int_final_day = -1;
+		
+		if(isNumeric(this.txtStartingDay.getText()) && isNumeric(this.txtFinalDay.getText()))
+		{
+			int_starting_day = Integer.parseInt(this.txtStartingDay.getText());
+			int_final_day = Integer.parseInt(this.txtFinalDay.getText());		
+		}
 		
 		if (event.getSource() == this.buttonSubmit) {
 			
@@ -162,77 +197,46 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 			try {
 				Intelligent_Report intel_report_obj = new Intelligent_Report();
 				
-				intel_report_obj.record_ordered_items_onto_map();
+				intel_report_obj.record_ordered_items_onto_map(int_starting_day, int_final_day);
 				intel_report_obj.get_all_items_ordered(); // hash map of entire list
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			String userName = txtUserName.getText();
-			String str_start_day = this.txtStartingDay.getText();
-			String str_final_day = this.txtFinalDay.getText();
+	
 			
-			if(userName.equals("") && str_start_day.equals("") && str_final_day.equals(""))
-			{
-				//Enters NOTHING
-				System.out.println("Unfiltered!");
-				
-				run_unfiltered_report();
-			}
-			else if(!userName.equals("") && (str_start_day.equals("") && str_final_day.equals("")))
-			{
-				//Enters in username but no day
-				System.out.println("!!!! just username");
-				run_filtered_report(userName, "", "");
-			}
-			else if(userName.equals("") && (!str_start_day.equals("") && !str_final_day.equals("")))
-			{	
-		
-				System.out.println("!!!! Days only");
-				
-				
-				run_filtered_report("", str_start_day, str_final_day);
-				
-				
-			}
-			else if(!str_start_day.equals("") && str_final_day.equals(""))
-			{
-				System.out.println("!!!! Yes startDay, but NO finalDay");
-				
-				//prompt user that they must fill in both day
-				JOptionPane.showMessageDialog(panel1, "You MUST fill in both the Starting Day and Final Day or leave them both blank.");
-			}
-			else if(str_start_day.equals("") && !str_final_day.equals(""))
-			{
-				
-				System.out.println("!!!! No startDay, but Yes finalDay");
-				
-				//prompts user that they must fill in both day
-				JOptionPane.showMessageDialog(panel1, "You MUST fill in both the Starting Day and Final Day or leave them both blank.");
-			}
+			System.out.println("str_start_day  = " + str_start_day);
 			
+			System.out.println("str_final_day  = " + str_final_day);
 			
-			else if(!userName.equals("") && (!str_start_day.equals("") && !str_final_day.equals("")))
-			{
-				
-				System.out.println("!!!! Yes Username, YES startDay, YES finalDay");
+			System.out.println("str_start_day  is NOT: " + (str_start_day.equals("")));
+			
+			System.out.println("str_final_day  is NOT: " + (str_final_day.equals("")));
 
-				run_filtered_report(userName, str_start_day, str_final_day);
+			System.out.println("!str_start_day.isEmpty() = " + !str_start_day.isEmpty());
+			
+			System.out.println("!str_final_day.isEmpty() = " + !str_final_day.isEmpty());
+			
+			System.out.println("!str_start_day.isBlank() = " + !str_start_day.isBlank());
+			
+			System.out.println("!str_final_day.isBlank() = " + !str_final_day.isBlank());
+			
+			System.out.println("(!isNumeric(str_start_day) = " + !isNumeric(str_start_day));
+			
+			System.out.println("(!isNumeric(str_final_day) = " + !isNumeric(str_final_day));
+			
+			if( (!str_start_day.equals("") || !str_final_day.equals("") ) && 
+				  (int_starting_day < 0 || int_final_day < 0) )
+			{
+				System.out.println("\nXXXXXXXXX = " + str_start_day != "" + " final is empty = " + !str_final_day.isEmpty());
+				JOptionPane.showMessageDialog(panel1, "The Starting Day and The Final Day fields must BOTH be numeric values or BOTH left blank.");
 			}
 			else
 			{
-				System.out.println("!!!! OTHER");
-				
-				run_filtered_report(userName, str_start_day, str_final_day);
-				
-				
-				
-
-				
-				
+				select_intelligent_report_query(userName, int_starting_day, int_final_day);
 			}
-			
+						
 		}
 		else 
 		{
@@ -244,6 +248,48 @@ public class IntelligentReportView extends JFrame implements ActionListener, Foc
 		}
 
  }
+	
+	public void select_intelligent_report_query(String userName, Integer min_day, Integer max_day)
+	{
+		// userName is blank
+		if(userName.equals(""))
+		{
+			
+			// min_day AND max_day are filled
+			// AND
+			// min_day AND max_day NOT filled
+			if((min_day >= 0 && max_day >= 0) || (min_day < 0 && max_day < 0))
+			{
+				this.run_unfiltered_report();
+			}
+			else //display error for only one day field entered
+			{
+				JOptionPane.showMessageDialog(panel1, "The Starting Day and The Maxmimum Day fields must BOTH be filled with a numeric value or BOTH left empty."
+						                         + "\nThe Minimum Day field must also be greater than the Maxmimum Day field.");
+			}
+				
+		}
+		else // userName is NOT blank
+		{
+			// min_day AND max_day filled
+			if(min_day >= 0 && max_day >= 0)
+			{
+				run_filtered_report(userName, min_day, max_day);
+			}
+			// min_day AND max_day NOT filled
+			else if (min_day < 0 && max_day < 0)
+			{
+				run_filtered_report(userName, min_day, max_day);
+			}
+			else //display error
+			{
+				JOptionPane.showMessageDialog(panel1, "The Starting Day and The Maxmimum Day fields must BOTH be filled with a numeric value or BOTH left empty."
+                        + "\nThe Minimum Day field must also be greater than the Maxmimum Day field.");
+			}
+		}
+			
+		
+	}
 
 	@Override
 	public void focusGained(FocusEvent e)

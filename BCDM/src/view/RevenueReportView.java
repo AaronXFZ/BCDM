@@ -39,6 +39,8 @@ public class RevenueReportView extends JFrame {
 	public RevenueReportView(String username, HashMap<String, Integer> items_quantity, 
 			String most_popular_item, double total_revenue) {
 		
+		System.out.println("1DFFSDFWFWG");
+		
 		this.username = username;
 		this.most_popular_item = most_popular_item;
 		this.total_revenue = total_revenue;
@@ -47,7 +49,11 @@ public class RevenueReportView extends JFrame {
 		
 		this.initializeComponents();
 
+		System.out.println("2DFFSDFWFWG");
+		
 		this.buildUI();
+		
+		System.out.println("3DFFSDFWFWG");
 	}
 	
 
