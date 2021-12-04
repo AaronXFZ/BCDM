@@ -116,8 +116,6 @@ public class LoginBusiness extends JFrame implements ActionListener {
 	private void selectWebFunctions(int situation)
 			throws ServletException, IOException {
 		
-		System.out.println("\n\nRUNNNNNNNNNNNNNNNNN 123344 \n\n");
-		
 		switch(situation)
 		{
 			case 0: request.setAttribute("Username", request.getParameter("username"));

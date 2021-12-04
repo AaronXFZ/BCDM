@@ -13,79 +13,87 @@
 	<body>
 
                 
-	<form action="login" method="post">
-		<table bgcolor="#00ffff" width="500" height="80" align="center">
+	<form action="reservation" method="post">
+		<table bgcolor="#ffffff" width="500" height="80" align="center">
 			    <tr>
 			      <tr>
 			      <td><c:out value="Enter Name: "></c:out></td>
-				  <td><input type="text" name="name"></td>
+				  <td><input type="text" name="fullname"></td>
 				</tr>
+				<tr>
+			      <tr>
+			      <td><c:out value="Enter Phone Number: "></c:out></td>
+				  <td><input type="text" name="phone_number"></td>
 				</tr>
+			
 				<tr>
 				  <td><c:out value="Enter the following : "></c:out></td>
 				  <td>
 					  <p>Check the Items You Want:</p>
-					  <input type="checkbox" id="Cheeseburger" name="Cheeseburger" value="Cheeseburger">
+					  <input type="checkbox" id="Cheeseburger" name="food_items" value="Cheeseburger">
 					  <label for="Cheeseburger"> Cheeseburger $4.00</label><br>
 					  
-		
-					  <input type="checkbox" id="Chicken Taco" name="Chicken Taco" value="Chicken Taco">
+					  <input type="checkbox" id="Chicken Taco" name="food_items" value="Chicken Taco">
 					  <label for="Chicken Taco"> Chicken Taco $3.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Beef Taco" name="Beef Taco" value="Beef Taco">
-					  <label for="vehicle3"> Beef Taco $2.00</label><br><br>
+					  <input type="checkbox" id="Beef Taco" name="food_items" value="Beef Taco">
+					  <label for="vehicle3"> Beef Taco $2.00</label><br>
 					  
 					  
-					  <input type="checkbox" id="Seafood Gumbo" name="Seafood Gumbo" value="Seafood Gumbo">
+					  <input type="checkbox" id="Seafood Gumbo" name="food_items" value="Seafood Gumbo">
 					  <label for="Seafood Gumbo"> Seafood Gumbo $10.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Snickers" name="Snickers" value="Snickers">
+					  <input type="checkbox" id="Snickers" name="food_items" value="Snickers">
 					  <label for="Chicken Taco"> Snickers $2.00</label><br>
 		  
-					  <input type="checkbox" id="Slice of Cake" name="Slice of Cake" value="Slice of Cake">
+					  <input type="checkbox" id="Slice of Cake" name="food_items" value="Slice of Cake">
 					  <label for="Cheeseburger"> Slice of Cake $3.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Cotton Candy" name="Cotton Candy" value="Cotton Candy">
+					  <input type="checkbox" id="Cotton Candy" name="food_items" value="Cotton Candy">
 					  <label for="Chicken Taco"> Cotton Candy $3.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Bottled Water" name="Bottled Water" value="Bottled Water">
-					  <label for="vehicle3"> Bottled Water $4.00</label><br><br>
+					  <input type="checkbox" id="Bottled Water" name="food_items" value="Bottled Water">
+					  <label for="vehicle3"> Bottled Water $4.00</label><br>
 					  
 					  
-					  <input type="checkbox" id="Fountain Drink" name="Fountain Drink" value="Fountain Drink">
+					  <input type="checkbox" id="Fountain Drink" name="food_items" value="Fountain Drink">
 					  <label for="Seafood Gumbo"> Fountain Drink $2.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Coffee" name="Coffee" value="Coffee">
+					  <input type="checkbox" id="Coffee" name="food_items" value="Coffee">
 					  <label for="Chicken Taco"> Coffee $1.00</label><br>
 					  
-					  <input type="checkbox" id="Milk" name="Milk" value="Milk">
+					  <input type="checkbox" id="Milk" name="food_items" value="Milk">
 					  <label for="Cheeseburger"> Slice of Cake $3.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Milkshake" name="Milkshake" value="Milkshake">
+					  <input type="checkbox" id="Milkshake" name="food_items" value="Milkshake">
 					  <label for="Chicken Taco"> Cotton Candy $3.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Boiled Egg" name="Boiled Egg" value="Boiled Egg">
-					  <label for="vehicle3"> Boiled Egg $1.00</label><br><br>
+					  <input type="checkbox" id="Boiled Egg" name="food_items" value="Boiled Egg">
+					  <label for="vehicle3"> Boiled Egg $1.00</label><br>
 					  
 					  
-					  <input type="checkbox" id="Hotdog" name="Hotdog" value="Hotdog">
+					  <input type="checkbox" id="Hotdog" name="food_items" value="Hotdog">
 					  <label for="Seafood Gumbo"> Hotdog $2.00</label><br>
 					  
 		
-					  <input type="checkbox" id="Fried Rice" name="Fried Rice" value="Fried Rice">
-					  <label for="Chicken Taco"> Fried Rice $8.00</label><br>
+					  <input type="checkbox" id="Fried Rice" name="food_items" value="Fried Rice">
+					  <label for="Chicken Taco"> Fried Rice $8.00</label><br><br>
+					  
+					  <input type="checkbox" id="online_reservation" name="reserve_type" value="online_reservation">
+					  <label for="online_reservation"> Mark if this is an online order.</label><br><br>
+			
 					  
 				  </td>
 				</tr>
 		</table>
-		<table bgcolor="#00ffff" width="500" height="80" align="center" border="0">		
+		<table bgcolor="#ffffff" width="500" height="80" align="center" border="0">		
 				<tr>
 				  <td></td>
 				  <td align="right"><input type="submit" name="Submit" value="Submit"></td>
@@ -99,7 +107,7 @@
 	</form>
 
 	
-	<h1 style="color: red;"> <c:out value="${requestScope.ErrorLogin}" /></h1>
+	<h1 style="color: black;"> <c:out value="Welcome ${requestScope.Username}!" /></h1>
 	
 	
 	

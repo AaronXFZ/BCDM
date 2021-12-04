@@ -14,6 +14,7 @@ import model.entities.OfflineItem;
 import model.entities.OnlineItem;
 import model.entities.PriceHistory;
 import model.entities.ItemOrder;
+import model.entities.Reservation;
 
 public class ConnectionFactory_Hibernate {
 	
@@ -26,6 +27,7 @@ public class ConnectionFactory_Hibernate {
             .addAnnotatedClass(OnlineItem.class)
             .addAnnotatedClass(PriceHistory.class)
             .addAnnotatedClass(ItemOrder.class)
+            .addAnnotatedClass(Reservation.class)
             .buildSessionFactory();
 	
 	public ConnectionFactory_Hibernate() {}
