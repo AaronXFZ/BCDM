@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import model.business.RegisterLoginBusiness;
+import model.business.LoginBusiness;
 import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
@@ -136,7 +136,7 @@ public class RegisterView  extends JFrame implements ActionListener {
 			String first_name = this.txtFirstName.getText();
 			String last_name = this.txtLastName.getText();
 			
-			RegisterLoginBusiness register_business_obj = RegisterLoginBusiness.getSingletonObject();
+			LoginBusiness register_business_obj = LoginBusiness.getSingletonObject();
 			
 			register_business_obj.setAttributes(userName, password, first_name, last_name, this.is_professor,
 					                                 isWebClient, null, null);

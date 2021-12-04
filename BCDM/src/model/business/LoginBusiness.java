@@ -24,7 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.business.RegisterLoginBusiness;
+import model.business.LoginBusiness;
 import model.dataccess.LoginDataAccess;
 
 
@@ -46,7 +46,7 @@ import view.IntelligentReportView;
 
 import view.OrderView;
 
-public class RegisterLoginBusiness extends JFrame implements ActionListener {
+public class LoginBusiness extends JFrame implements ActionListener {
 	private String address = "";
 	private Boolean isWebClient = false;
 	private String userName;
@@ -66,12 +66,12 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 	private final String failed_connection_DB_status = "Database connection failed.";
 	
 	
-	private static RegisterLoginBusiness singleton_instance = new RegisterLoginBusiness();
+	private static LoginBusiness singleton_instance = new LoginBusiness();
 	
-	private RegisterLoginBusiness()
+	private LoginBusiness()
 	{ }
 	
-	public static RegisterLoginBusiness getSingletonObject()
+	public static LoginBusiness getSingletonObject()
 	{
 		
 		return singleton_instance;
@@ -116,7 +116,7 @@ public class RegisterLoginBusiness extends JFrame implements ActionListener {
 	private void selectWebFunctions(int situation)
 			throws ServletException, IOException {
 		
-
+		System.out.println("\n\nRUNNNNNNNNNNNNNNNNN 123344 \n\n");
 		
 		switch(situation)
 		{

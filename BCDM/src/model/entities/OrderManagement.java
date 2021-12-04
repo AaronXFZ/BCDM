@@ -17,7 +17,7 @@ public class OrderManagement {
 	
 	private List<ItemOrder> all_items = new ArrayList();
 	private HashMap<Integer, Boolean> visited_order_id = new HashMap<Integer, Boolean>();
-
+	private List<String> list_of_all_orders_str = new ArrayList();
 	public OrderManagement() {
 		all_items = new OrderAccess("").get_ALL_order_items_orders();
 	}
@@ -41,6 +41,35 @@ public class OrderManagement {
 		
 		return results;
 		
+	}
+	
+	
+	public List<String> get_list_of_all_orders_str()
+	{
+		String results = "";
+		
+		for(int i = 0 ; i < all_items.size(); i++)
+		{
+			ItemOrder o = all_items.get(i);
+			if(visited_order_id.get(o.get_order_id()) == null)
+			{
+				results += "     "+ o.get_username() + "     " + o.get_date() + "     " + o.get_time() + "\n";
+				
+				visited_order_id.put(o.get_order_id(), true);
+				
+				list_of_all_orders_str.add(results);
+				
+				results = "";
+			}
+		}
+		
+		return list_of_all_orders_str;
+		
+	}
+	
+	public List<ItemOrder> get_all_items_list()
+	{
+		return all_items;
 	}
 	
 	public Integer get_list_size()
@@ -70,4 +99,6 @@ public class OrderManagement {
 		}
 		
 	}
+	
+	
 }

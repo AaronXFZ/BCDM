@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-import model.business.RegisterLoginBusiness;
+import model.business.LoginBusiness;
 import model.entities.Intelligent_Report;
 import model.entities.Receipt;
 import view.RevenueReportView;

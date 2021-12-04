@@ -189,10 +189,10 @@ public class OrderView {
 			JOptionPane.showMessageDialog(orderPanel, "Order Submited");
 			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
 		});
-		JButton printReceipt = new JButton("Print Receipt");
-		printReceipt.addActionListener(ae -> {
-			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
-		});
+//		JButton printReceipt = new JButton("Print Receipt");
+//		printReceipt.addActionListener(ae -> {
+//			JOptionPane.showMessageDialog(orderPanel, generateReceiptString());
+//		});
 		JButton printHistory = new JButton("Print Price History");
 		printHistory.addActionListener(ae -> {
 			JOptionPane.showMessageDialog(orderPanel, generateHistoryInformation());
@@ -213,12 +213,18 @@ public class OrderView {
 			employeeProtectedServices("update_discount_view");
 		});
 		
+		JButton btn_view_order_management = new JButton("Order Management");
+		btn_view_order_management.addActionListener(ae ->{
+			employeeProtectedServices("order_management_view");
+		});
+		
 		orderPanel.add(submitButton);
-		orderPanel.add(printReceipt);
+		//orderPanel.add(printReceipt);
 		orderPanel.add(printHistory);
 		orderPanel.add(btn_view_intel_report);
 		orderPanel.add(btn_view_register_product);
 		orderPanel.add(btn_view_update_discount);
+		orderPanel.add(btn_view_order_management);
 		
 		orderPanel.setBorder(BorderFactory.createLineBorder(bronco, 3));
 		return orderPanel;
@@ -536,6 +542,10 @@ public class OrderView {
 		else if(feature_name.equals("update_discount_view"))
 		{
 			new DiscountDatabaseModifierView(this.user.getUserName());
+		}
+		else if(feature_name.equals("order_management_view"))
+		{
+			new OrderManagementView();
 		}
 	}
 	

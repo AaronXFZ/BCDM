@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 import view.RegisterView;
 
-import model.business.RegisterLoginBusiness;
+import model.business.LoginBusiness;
 import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
@@ -104,7 +104,7 @@ public class LoginView extends JFrame implements ActionListener {
 			String userName = txtUserName.getText();
 			String password = txtPassword.getText();
 			
-			RegisterLoginBusiness login_business_obj = RegisterLoginBusiness.getSingletonObject();
+			LoginBusiness login_business_obj = LoginBusiness.getSingletonObject();
 			
 			login_business_obj.setAttributes(userName, password, isWebClient, null, null);
 			

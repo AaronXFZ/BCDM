@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.business.RegisterLoginBusiness;
+import model.business.LoginBusiness;
 import model.dataccess.ItemsAccess;
 
 @SuppressWarnings("serial")
@@ -143,7 +143,7 @@ public class RevenueReportView extends JFrame {
 		//this.getContentPane().add(panel3, BorderLayout.SOUTH);
 
 		this.setTitle("Revenue Result");
-		this.setBounds(1000, 140, 1000, 200);
+		this.setBounds(400, 140, 400, 200);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
