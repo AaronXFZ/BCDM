@@ -67,11 +67,11 @@ public class ReservationBusiness {
 	
 	public void setAttributes(String in_fullName, String in_phoneNumber, Cart cart, HttpServletRequest in_request, HttpServletResponse in_response)
 	{
-		fullName = in_fullName;
-		phoneNumber = in_phoneNumber;
+		this.fullName = in_fullName;
+		this.phoneNumber = in_phoneNumber;
 
-		request = in_request;
-		response = in_response;
+		this.request = in_request;
+		this.response = in_response;
 		
 		this.cart = cart;
 
@@ -129,7 +129,7 @@ public class ReservationBusiness {
 public void validate(boolean is_online) {
 			
 		
-		//try {
+		try {
 			
 			if (fullName.equals(""))
 			{
@@ -159,30 +159,31 @@ public void validate(boolean is_online) {
 			//goto check status page with name and phone
 			//callWebFunctions(0);
 
+			System.out.println("\n\n\n\n\nStatus=============== " + 
+					reserve_access_obj.get_reservation_status(this.fullName, this.phoneNumber));
+		}
+		catch (MessageException e) 
+		{
 			
-//		}
-//		catch (MessageException e) 
-//		{
-//			
-//			if (e.getMessage().equals(blank_username_status)) {
-//				callWebFunctions(1);
-//		
-//			} else if (e.getMessage().equals(blank_password_status)) {
-//
-//				callWebFunctions(2);
-//		
-//			} else if (e.getMessage().equals(inc_credentials_status)) {
-//					callWebFunctions(3);
-//	
-//		    }
-//	
-//
-//		}
+			if (e.getMessage().equals(blank_username_status)) {
+				callWebFunctions(1);
+		
+			} else if (e.getMessage().equals(blank_password_status)) {
+
+				callWebFunctions(2);
+		
+			} else if (e.getMessage().equals(inc_credentials_status)) {
+					callWebFunctions(3);
+	
+		    }
+	
+
+		}
 	
 		
 
 
-		//callWebFunctions(5);
+		callWebFunctions(5);
 	
 		
 	}

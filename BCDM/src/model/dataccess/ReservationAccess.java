@@ -20,12 +20,45 @@ public class ReservationAccess {
 	
 	public ReservationAccess(String fullname, String phoneNumber)
 	{
-		
+		this.fullName = fullname;
+		this.phoneNumber = phoneNumber;
 	}
 	
 	private List<Reservation> ordered_items = new ArrayList();
 	
 	private List<Reservation> ordered = new ArrayList();
+	
+	public String get_reservation_status(String fullname, String phoneNumber)
+	{
+		String status="";
+		
+		try {
+			Session session = conn_factory.getSession();
+			
+			if(!session.getTransaction().isActive())
+				session.beginTransaction();
+			
+			List<Reservation> reser_query = session.createQuery("from Reservation where firstlastname='"+
+							fullname+"' AND phonenumber='"+phoneNumber+"'").getResultList();
+			
+			if(reser_query.size() > 0)
+			{
+				for(int i = 0; i < reser_query.size(); i++)
+				{
+					if(reser_query.get(i).get_status() != null )
+					{
+						status = reser_query.get(i).get_status();
+					}
+				}
+				reser_query.get(0).get_status();
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return status;
+	}
 	
 	public void submit_order(Cart cart, boolean is_online) throws ClassNotFoundException, SQLException
 	{

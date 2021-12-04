@@ -45,6 +45,12 @@ public class ReservationControl  extends HttpServlet {
 		
 		String reserve_type = request.getParameter("reserve_type");
 		
+		if(reserve_type == null || reserve_type.equals(""))
+		{
+			reserve_type = "";
+		}
+		
+		
 		System.out.println("\n\n"+phoneNumber+" --- " + fullName + " --- " + food_item_name);
 		
 		ReservationBusiness reserve_business_obj = ReservationBusiness.getSingletonObject();

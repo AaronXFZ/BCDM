@@ -107,9 +107,6 @@
 	</form>
 
 	
-	<h1 style="color: black;"> <c:out value="Welcome ${requestScope.Username}!" /></h1>
-	
-	
 	
 	</body>
 

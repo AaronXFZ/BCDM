@@ -9,7 +9,7 @@ public class Reservation {
 	@Column(name="id", nullable=false)
 	private int id;
 	
-	@Column(name="fullname", nullable=false)
+	@Column(name="firstlastname", nullable=false)
 	private String fullname;
 	
 	@Column(name="phonenumber", nullable=false)
@@ -47,6 +47,16 @@ public class Reservation {
 		else
 			this.status = "counter";
 
+	}
+	
+	public void set_status(String status)
+	{
+		this.status = status;
+	}
+	
+	public String get_status()
+	{
+		return status;
 	}
 	
 	public String get_fullname()
