@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+
 public class ReceiptView {
 	
 	private JLabel lblUserName, JLabelHeader_title, JLabelHeader_order_num, JLabelHeader_dateTime, JLabelHeader_realName;

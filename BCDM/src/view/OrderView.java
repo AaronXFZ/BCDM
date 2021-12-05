@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +48,8 @@ public class OrderView {
 	User user = User.getSingletonObject();
 	
 	Cart cart_obj = new Cart(user);
+	
+	private Double show_discount;
 	
 	private Double user_discount_rate;
 	
@@ -77,6 +81,7 @@ public class OrderView {
 		UserAccountRetrieval user_db = new UserAccountRetrieval(this.user.getUserName()); //entity for retrieving user account in model.entity
 		this.user = user_db.get_user(this.user.getUserName());
 		this.user_discount_rate = 1.0-user_db.get_discount_from_db();
+		this.show_discount = user_db.get_discount_from_db();
 		this.user.set_discount_rate(this.user_discount_rate);
 		
 		System.out.println("\n\tuser_db.get_discount(); = "  + user_db.get_discount());
@@ -303,7 +308,7 @@ public class OrderView {
 				}
 				else {
 					//priceLable.setText(toPriceString((int)(currentPrice*90)));
-					priceLable.setText(toPriceString((int)(currentPrice*this.user_discount_rate*100)));
+					priceLable.setText(toPriceString((int)(currentPrice*1.00-this.user_discount_rate*100)));
 				}
 			}
 			else {
@@ -457,8 +462,14 @@ public class OrderView {
     }
 	
 	private String generateReceiptString() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
+	   	String current_time_date = dtf.format(now);  
+		
         StringBuilder sb = new StringBuilder();
-        sb.append("Receipt: \n\n");
+        
+        sb.append("Receipt:\nName: "+user.get_first_name()+" "+user.get_last_name()+"\nDate: "+current_time_date+"\n\n");
+        
         for(String selectedItem: selectedMenuItems) {
             sb.append(selectedItem);
             sb.append(" - ");
@@ -476,12 +487,15 @@ public class OrderView {
         
         System.out.println("ABCDEF - " + user.get_is_professor());
         System.out.println("ABCDEF - user_discount_rate = " + this.user_discount_rate);
+        
+        show_discount = Math.round(show_discount *100.0)/100.0; //rounding
+        
         if(user.get_is_professor()) {
-            sb.append("\nThis Professor account got "+this.user_discount_rate*100+" % discount.\n");
+            sb.append("\nThis Professor account got "+(show_discount*100)+" % discount.\n");
         }
         else
         {
-        	sb.append("\nThis Student account got "+this.user_discount_rate*100+" % discount.\n");
+        	sb.append("\nThis Student account got "+(show_discount*100)+" % discount.\n");
         }
 
         sb.append("\n");
