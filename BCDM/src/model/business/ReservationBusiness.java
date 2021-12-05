@@ -41,10 +41,14 @@ public class ReservationBusiness {
 	private String address = "";
 	private String fullName = "";
 	private String phoneNumber = "";
+	
+	private Integer order_id;
+	private String new_status;
+	private String current_status;
+	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	
-	
+
 	
 	//Status string values for try/catch functions
 	//Change here will affect the entire class
@@ -64,6 +68,7 @@ public class ReservationBusiness {
 		
 		return singleton_instance;
 	}
+
 	
 	public void setAttributes(String in_fullName, String in_phoneNumber, Cart cart, HttpServletRequest in_request, HttpServletResponse in_response)
 	{
@@ -75,6 +80,90 @@ public class ReservationBusiness {
 		
 		this.cart = cart;
 
+	}
+	
+	public void setAttributes(Integer order_id, String new_status, Cart cart, HttpServletRequest in_request, HttpServletResponse in_response)
+	{
+		this.order_id = order_id;
+		this.new_status = new_status;
+		
+		this.request = in_request;
+		this.response = in_response;
+
+
+	}
+	
+	public void set_phone_number(String phone_number)
+	{
+		this.phoneNumber = phone_number;
+	}
+	
+	public void set_full_name(String full_name)
+	{
+		this.fullName = full_name;
+	}
+	
+	public Integer get_order_id()
+	{
+		Integer order_id = 1;
+		
+		ReservationAccess reserve_access_obj = new ReservationAccess(this.fullName, this.phoneNumber);
+		
+		order_id = reserve_access_obj.get_order_id(this.phoneNumber);
+		
+		this.order_id = order_id;
+		
+		return order_id;
+	}
+	
+	public Integer get_order_id(String full_name, String phone_number)
+	{
+		Integer order_id = 1;
+		
+		ReservationAccess reserve_access_obj = new ReservationAccess(full_name, phone_number);
+		
+		order_id = reserve_access_obj.get_order_id(phone_number);
+		
+		this.order_id = order_id;
+		
+		return order_id;
+	}
+	
+
+	
+	public void transition_to_a_reservation_view(String full_name, String phone_number)
+	{
+		this.order_id = get_order_id(full_name, phone_number);
+		
+		ReservationAccess reserve_access_obj = new ReservationAccess(full_name, phone_number);
+		
+		this.current_status = reserve_access_obj.get_reservation_status(full_name, phone_number);
+		
+		if(this.current_status.equals("online-pending"))
+		{
+			callWebFunctions(6); //set address to setReservations
+			callWebFunctions(5); //transitions to setReverations
+		}
+		else
+		{	//Transition to get reservation status page
+			callWebFunctions(7); //set address to reservation status once with no input needed
+			callWebFunctions(5); //transitions to setReverations
+		}
+	}
+	
+	public void update_reserveation_status()
+	{
+		ReservationAccess reserve_access_obj = new ReservationAccess(this.fullName, this.phoneNumber);
+		this.order_id = reserve_access_obj.get_order_id(this.phoneNumber);
+		reserve_access_obj.update_reservation_status(this.order_id);
+	}
+	
+	public void update_reserveation_status(String full_name, String phone_number)
+	{
+		ReservationAccess reserve_access_obj = new ReservationAccess(full_name, phone_number);
+		Integer current_order_id = reserve_access_obj.get_order_id(full_name, phone_number);
+		reserve_access_obj.update_reservation_status(current_order_id);
+		this.new_status = "online-complete";
 	}
 	
 	private void callWebFunctions(int situation)
@@ -96,7 +185,7 @@ public class ReservationBusiness {
 		
 		switch(situation)
 		{
-			case 0: request.setAttribute("Username", request.getParameter("phone_number"));
+			case 0: request.setAttribute("Phone", request.getParameter("phone_number"));
 					address = "/view/ReservationView.jsp";
 					break;
 					
@@ -118,7 +207,18 @@ public class ReservationBusiness {
 					
 			case 5: RequestDispatcher rd = request.getRequestDispatcher(address);
 					rd.forward(request, response);
-
+					break;
+					
+			case 6: request.setAttribute("Status", this.new_status);
+					address = "/view/SetStatusReservation.jsp";
+					break;
+					
+			case 7: request.setAttribute("Status", this.new_status);
+					address = "/view/FinalStatusReservation.jsp";
+					break;
+			
+			case 8: request.setAttribute("Status", this.new_status);
+					address = "/view/FindReservation.jsp";
 					break;
 			
 			default: ;break;
@@ -181,7 +281,7 @@ public void validate(boolean is_online) {
 		}
 	
 		
-
+		callWebFunctions(8);
 
 		callWebFunctions(5);
 	

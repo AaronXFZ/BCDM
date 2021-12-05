@@ -28,6 +28,91 @@ public class ReservationAccess {
 	
 	private List<Reservation> ordered = new ArrayList();
 	
+	public void update_reservation_status(Integer order_id)
+	{
+		Session session;
+		try {
+			session = conn_factory.getSession();
+			if(!session.getTransaction().isActive())
+				session.beginTransaction();
+			
+			session.createQuery("update Reservation set status='online-complete' where order_id='"+order_id+"'")
+			       .executeUpdate();
+			session.getTransaction().commit();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public Integer get_order_id(String full_name, String phone_number)
+	{
+		Integer order_id = -1;
+		
+		try {
+			Session session = conn_factory.getSession();
+			
+			if(!session.getTransaction().isActive())
+			{
+				session.beginTransaction();
+			}
+			
+			List<Reservation> reserve_obj = session.createQuery("from Reservation where firstlastname='"+full_name+"' and phonenumber='"+phone_number+"' and status='online-pending'")
+			.getResultList();
+			
+			for(int i = 0; i < reserve_obj.size(); i++)
+			{
+				Integer temp = order_id;
+				
+				order_id = reserve_obj.get(i).get_order_id();
+				
+				if(temp != order_id)
+					break;
+				
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return order_id;
+	}
+	
+	public Integer get_order_id(String phone_number)
+	{
+		Integer order_id = -1;
+		
+		try {
+			Session session = conn_factory.getSession();
+			
+			if(!session.getTransaction().isActive())
+			{
+				session.beginTransaction();
+			}
+			
+			List<Reservation> reserve_obj = session.createQuery("from Reservation where phonenumber='"+phone_number+"' and status='online-pending'")
+			.getResultList();
+			
+			for(int i = 0; i < reserve_obj.size(); i++)
+			{
+				Integer temp = order_id;
+				
+				order_id = reserve_obj.get(i).get_order_id();
+				
+				if(temp != order_id)
+					break;
+				
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return order_id;
+	}
+	
 	public String get_reservation_status(String fullname, String phoneNumber)
 	{
 		String status="";
